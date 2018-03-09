@@ -13,7 +13,18 @@ echo -e "${NBLD_CYAN}###  rate&CV http://www.linkedin.com/in/oleh-kurachenko-6b0
 
 source src/apt_update.sh
 
-#if [ "$1" == "desktop" ]; then
-#    source src/install_common.sh
-#
-#fi
+if [ "$1" == "desktop" ]; then
+    source src/install_common.sh
+    source src/apt_update.sh
+    source src/install_desktop.sh
+    source src/apt_update.sh
+fi
+
+if [ "$1" == "server" ]; then
+    source src/install_common.sh
+    source src/apt_update.sh
+    source src/install_server.sh
+    source src/apt_update.sh
+fi
+
+echo -e "${BOLD_CYAN}###  Setting up ${BOLD_GREEN}FINISHED, ALL OK!${RESET_COLOR}"

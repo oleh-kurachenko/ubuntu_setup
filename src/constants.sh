@@ -15,3 +15,10 @@ apt_action() {
     sudo apt-get $1 --yes
     echo -e "${BOLD_GREEN}#    apt-get $1: OK!${RESET_COLOR}"
 }
+
+# persorm bash action with proper cli comments
+bash_action() {
+    echo -e "${BOLD_BLUE}#    $1...${RESET_COLOR}"
+    sudo $1
+    echo -e "${BOLD_GREEN}#    $1: OK!${RESET_COLOR}"
+}
