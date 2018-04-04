@@ -33,9 +33,7 @@ bash_action() {
     {
         echo -e "${BOLD_RED}#    $1: FAILED!${RESET_COLOR}";
         common_errors_list="${common_errors_list}  $1: FAILED!\n";
-        echo -e "common list: ${common_errors_list}";
     }
-    echo -e "common list: ${common_errors_list}"
 }
 
 # perform apt action with proper cli comments
