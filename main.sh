@@ -27,13 +27,18 @@ source_comm() {
 }
 
 # persorm bash action with proper cli comments
-bash_action() {
+nosudo_bash_action() {
     echo -e "${BOLD_BLUE}#    $1...${RESET_COLOR}"
-    sudo $1 && echo -e "${BOLD_GREEN}#    $1: OK!${RESET_COLOR}" ||
+    $1 && echo -e "${BOLD_GREEN}#    $1: OK!${RESET_COLOR}" ||
     {
         echo -e "${BOLD_RED}#    $1: FAILED!${RESET_COLOR}";
         common_errors_list="${common_errors_list}  $1: FAILED!\n";
     }
+}
+
+# persorm bash action with proper cli comments
+bash_action() {
+    nosudo_bash_action "sudo $1"
 }
 
 # perform apt action with proper cli comments
