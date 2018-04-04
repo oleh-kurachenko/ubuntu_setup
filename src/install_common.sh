@@ -16,6 +16,7 @@ apt_action "install tree"
 apt_action "install install openssh-server"
 
 apt_action "install nodejs"
+apt_action "install nodejs-legacy"
 apt_action "install npm"
 apt_action "install build-essential"
 
