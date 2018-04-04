@@ -17,8 +17,13 @@ apt_action "install openssh-server"
 
 apt_action "install curl"
 
-bach_action "curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -" && \
-    ( apt_action "install nodejs"; apt_action "install build-essential" )
+bash_action "curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -" &&
+    {
+        apt_action "install nodejs";
+        apt_action "install build-essential";
+        bash_action "npm install -g grunt-cli";
+        bash_action "npm install -g typescript";
+     }
 
 apt_action "install default-jre"
 apt_action "install golang-go"

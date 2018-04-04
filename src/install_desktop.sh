@@ -5,12 +5,14 @@ echo -e "${BOLD_CYAN}#    installing desktop programs & tools${RESET_COLOR}"
 
 # installing Google Chrome
 dpkg -l | grep "google-chrome-stable" && \
-    echo -e "${BOLD_BLUE}#    Google Chrome already installed.${RESET_COLOR}" || \
-    ( echo -e "${BOLD_BLUE}Installing Google Chrome...${RESET_COLOR}" ; \
-    bash_action "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" ; \
-    bash_action "dpkg -i google-chrome-stable_current_amd64.deb" ; \
-    bash_action "rm -f google-chrome-stable_current_amd64.deb" ; \
-    echo -e "${BOLD_GREEN}Installig Google Chrome: OK!${RESET_COLOR}" )
+    echo -e "${BOLD_BLUE}#    Google Chrome already installed.${RESET_COLOR}" ||
+    {
+        echo -e "${BOLD_BLUE}Installing Google Chrome...${RESET_COLOR}" ;
+        bash_action "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" ;
+        bash_action "dpkg -i google-chrome-stable_current_amd64.deb" ;
+        bash_action "rm -f google-chrome-stable_current_amd64.deb" ;
+        echo -e "${BOLD_GREEN}Installig Google Chrome: OK!${RESET_COLOR}";
+    }
 
 # installing UI tools & themes
 apt_action "install unity-tweak-tool"

@@ -19,17 +19,22 @@ common_errors_list=""
 
 # run source, show proper error message if problems
 source_comm() {
-    source $1 || { echo -e "${BOLD_RED}#    Failed to load $1${RESET_COLOR}" ; \
-        common_errors_list="${common_errors_list}  Failed to load $1"\n; }
+    source $1 ||
+    {
+        echo -e "${BOLD_RED}#    Failed to load $1${RESET_COLOR}";
+        common_errors_list="${common_errors_list}  Failed to load $1"\n;
+    }
 }
 
 # persorm bash action with proper cli comments
 bash_action() {
     echo -e "${BOLD_BLUE}#    $1...${RESET_COLOR}"
-    sudo $1 && echo -e "${BOLD_GREEN}#    $1: OK!${RESET_COLOR}" || \
-        { echo -e "${BOLD_RED}#    $1: FAILED!${RESET_COLOR}"; \
-        common_errors_list="${common_errors_list}  $1: FAILED!\n"; \
-        echo -e "common list: ${common_errors_list}"; }
+    sudo $1 && echo -e "${BOLD_GREEN}#    $1: OK!${RESET_COLOR}" ||
+    {
+        echo -e "${BOLD_RED}#    $1: FAILED!${RESET_COLOR}";
+        common_errors_list="${common_errors_list}  $1: FAILED!\n";
+        echo -e "common list: ${common_errors_list}";
+    }
     echo -e "common list: ${common_errors_list}"
 }
 
@@ -69,6 +74,8 @@ if [ "$common_errors_list" == "" ];
 then
     echo -e "${BOLD_GREEN}###  All OK!${RESET_COLOR}"
 else
-    ( echo -e "${BOLD_YELL}###  Problems during setup:${RESET_COLOR}"; \
-    echo -e "${BOLD_RED}$common_errors_list${RESET_COLOR}" )
+    {
+        echo -e "${BOLD_YELL}###  Problems during setup:${RESET_COLOR}";
+        echo -e "${BOLD_RED}$common_errors_list${RESET_COLOR}";
+    }
 fi
