@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source constants.sh
-
 # welcome message
 echo -e "${BOLD_CYAN}#    installing server programs & tools${RESET_COLOR}"
 
