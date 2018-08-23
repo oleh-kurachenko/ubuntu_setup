@@ -108,7 +108,7 @@ deb_install() {
             echo -e "${BOLD_GREEN}$1 successfully installed"
             return 0
         } || {
-            echo -e "${BORD_RED}failed to install $1"
+            echo -e "${BOLD_RED}failed to install $1"
             return 1
         }
     fi
