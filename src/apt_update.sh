@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
 # welcome message
-echo -e "${BOLD_CYAN}#    updating apt dependencies${RESET_COLOR}"
+echo -e "${BOLD_CYAN}Updating apt dependencies${RESET_COLOR}"
 
-apt_action update
-apt_action upgrade
-apt_action autoremove
+logged_command "sudo apt-get update --yes"
 
-# exit message
-echo -e "${BOLD_CYAN}#    apt dependencies: ${BOLD_GREEN}UPDATED!${RESET_COLOR}"
+logged_command "sudo apt-get upgrade --yes"
+
+logged_command "sudo apt-get autoremove --yes"
