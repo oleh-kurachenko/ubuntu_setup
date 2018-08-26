@@ -19,3 +19,7 @@ apt_install "default-jre"
 
 logged_command \
     'git config --global alias.lg "log --oneline --decorate --graph --all"'
+
+logged_command \
+    "gsettings set org.gnome.desktop.input-sources sources \
+     \"[('xkb', 'us'), ('xkb', 'ua'), ('xkb', 'ru')]\""
