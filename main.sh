@@ -23,6 +23,8 @@ ubuntu_version="16LTS"
 update_software=true
 temporary_file_prefix="oleh_kurachenko_ubuntu_setup_script_temporary_file_"
 tmp_directory="/tmp"
+opt_directory="/opt"
+configsets_path="configsets"
 
 # cleaning old and creating new log files
 rm -f ${tmp_directory}/${temporary_file_prefix}*
@@ -34,6 +36,9 @@ touch "$console_log_file"
 touch "$error_log_file"
 touch "$stdout_log_file"
 touch "$stderr_log_file"
+
+# setting /opt view note
+opt_directories_to_check=()
 
 # Common methods
 #-------------------------------------------------------------------------------
@@ -103,8 +108,8 @@ deb_install() {
         echo -e "${BOLD_GREEN}$1 already installed${RESET_COLOR}"
         return 0
     else
-        logged_command "sudo wget $2 -O ${tmp_directory}/$1.deb" &&
-        logged_command "sudo gdebi ${tmp_directory}/$1.deb --n" && {
+        logged_command "wget '$2' -O '${tmp_directory}/$1.deb'" &&
+        logged_command "sudo gdebi '${tmp_directory}/$1.deb' --n" && {
             echo -e "${BOLD_GREEN}$1 successfully installed"
             return 0
         } || {
@@ -114,11 +119,82 @@ deb_install() {
     fi
 }
 
+# Takes program name and URL of archive which can be uncompressed by tar
+# $1: package name
+# $2: archive file URL
+# $3: expected archive extension
+# return exit code: 0 if all ok, 1 otherwise
+tar_load_to_opt() {
+    ls -l "${opt_directory}" | grep $1 1> /dev/null 2> /dev/null
+    if [ $? -eq 0 ]
+    then
+        echo -e "${BOLD_GREEN}$1 already in ${opt_directory}${RESET_COLOR}"
+        return 0
+    else
+        logged_command "wget '$2' -O '${tmp_directory}/$1.$3'" &&
+        logged_command "sudo mkdir '${opt_directory}/$1'" &&
+        logged_command "sudo tar -xf '${tmp_directory}/$1.$3' \
+            -C ${opt_directory}/$1" && {
+            echo -e "${BOLD_GREEN}$1 successfully downloaded"
+            opt_directories_to_check+=("$1")
+            return 0
+        } || {
+            echo -e "${BOLD_RED}failed to download $1"
+            return 1
+        }
+    fi
+}
+
+# Takes program name and URL of file
+# $1: package name
+# $2: file URL
+# return exit code: 0 if all ok, 1 otherwise
+file_load_to_opt() {
+    ls -l "${opt_directory}" | grep $1 1> /dev/null 2> /dev/null
+    if [ $? -eq 0 ]
+    then
+        echo -e "${BOLD_GREEN}$1 already in ${opt_directory}${RESET_COLOR}"
+        return 0
+    else
+        logged_command "sudo mkdir '${opt_directory}/$1'" &&
+        logged_command "sudo wget '$2' -P '${opt_directory}/$1'" && {
+            echo -e "${BOLD_GREEN}$1 successfully downloaded"
+            opt_directories_to_check+=("$1")
+            return 0
+        } || {
+            echo -e "${BOLD_RED}failed to download $1"
+            return 1
+        }
+    fi
+}
 # Script body
 #-------------------------------------------------------------------------------
 
+# parsing command line arguments
+
+configsets=()
+
+i=1;
+while [ "$i" -le "$#" ]
+do
+    if [ ${!i} == "-s" ] || [ ${!i} == "--configset" ]
+    then
+        i=$((i + 1))
+        configsets+=(${!i})
+    else
+        echo -e "${BOLD_RED}Unknown option: ${!i}${RESET_COLOR}"
+        exit 1
+    fi
+    i=$((i + 1))
+done
+
 # welcome message
 sudo echo -e "${BOLD_GREEN}Sudo passed (running root)${RESET_COLOR}"
+if [ $? -ne 0 ]
+then
+    echo -e "${BOLD_RED}Sudo not passed (exit)${RESET_COLOR}"
+    exit 1
+fi
 echo -e "${BOLD_CYAN}"
 echo -e "Setup tool for Ubuntu"
 echo -e "    by Oleh Kurachenko"
@@ -130,17 +206,13 @@ ${RESET_COLOR}"
 
 logged_source "src/apt_update.sh"
 
-if [ "$1" == "desktop" ];
-then
-    logged_source "src/install_common.sh"
-    logged_source "src/install_desktop.sh"
-    logged_source "src/apt_update.sh"
-fi
+for configset in "${configsets[@]}"
+do
+    logged_source "${configsets_path}/${ubuntu_version}/${configset}.sh"
+done
 
-if [ "$1" == "server" ];
+if [ "${#configsets[@]}" -ne 0 ]
 then
-    logged_source "src/install_common.sh"
-    logged_source "src/install_server.sh"
     logged_source "src/apt_update.sh"
 fi
 
@@ -149,9 +221,23 @@ echo -e "${BOLD_CYAN}Setting up FINISHED${RESET_COLOR}"
 if [ -s ${error_log_file} ]
 then
     echo -e "${BOLD_RED}Errors occured during the setup${RESET_COLOR}"
-    echo -e "${BOLD_RED}Error Log:${NBLD_RED}"
+    echo -e "${BOLD_RED}Error Log:"
     cat ${error_log_file}
     echo -e "${RESET_COLOR}"
 else
     echo -e "${BOLD_GREEN}All OK!${RESET_COLOR}"
+fi
+
+echo -e "${BOLD_BLUE}Logs can be found here: ${NBLD_BLUE}${console_log_file}\
+${RESET_COLOR}"
+if [ ${#opt_directories_to_check[@]} -ne 0 ]
+then
+    echo -e "${BOLD_YELL}Check ${opt_directory} to install programs which \
+requires manual installation${RESET_COLOR}"
+    echo -e "${BOLD_YELL}The following directories insize of ${opt_directory} \
+should be checked:${RESET_COLOR}"
+    for program_directory in "${opt_directories_to_check[@]}"
+    do
+        echo -e "${BOLD_YELL}- ${program_directory}${RESET_COLOR}"
+    done
 fi
