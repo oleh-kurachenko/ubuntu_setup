@@ -1,0 +1,6 @@
+image: ubuntu:16.04
+
+test:
+  stage: test
+  script:
+    - ./main.s -s common -s dev -s desktop -s server
