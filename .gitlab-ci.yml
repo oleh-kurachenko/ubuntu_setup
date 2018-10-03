@@ -1,3 +1,7 @@
+stages:
+  - test
+  - release
+
 image: queeno/ubuntu-desktop
 
 before_script:
@@ -8,6 +12,12 @@ before_script:
   - echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 test:
-  stage: test
   script:
     - ./main.sh -s common -s dev -s desktop -s server -v
+    
+release:
+  artifacts:
+    paths:
+      - main.sh
+      - src
+      - configsets
