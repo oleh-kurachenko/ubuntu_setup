@@ -31,12 +31,8 @@ configsets_path="configsets"
 rm -f ${tmp_directory}/${temporary_file_prefix}*
 console_log_file="${tmp_directory}/${temporary_file_prefix}console_log.txt"
 error_log_file="${tmp_directory}/${temporary_file_prefix}error_log.txt"
-stdout_log_file="${tmp_directory}/${temporary_file_prefix}stdout_log.txt"
-stderr_log_file="${tmp_directory}/${temporary_file_prefix}stderr_log.txt"
 touch "$console_log_file"
 touch "$error_log_file"
-touch "$stdout_log_file"
-touch "$stderr_log_file"
 
 # setting /opt view note
 opt_directories_to_check=()
@@ -57,30 +53,23 @@ logged_source() {
 # $1: command (if more then one, should be a block)
 # returns exit code: 0 if all ok, 1 otherwise
 logged_command() {
-    echo -n "" > "$stdout_log_file"
-    echo -n "" > "$stderr_log_file"
+
     echo -e "${BOLD_BLUE}$1...${RESET_COLOR}"
     echo -e "$ $1" >> "$console_log_file"
-    eval $1 1> "$stdout_log_file" 2> "$stderr_log_file"
-    if [ ${verbose_log} ]
+
+    if ${verbose_log}
     then
-        cat "$stdout_log_file"
-        cat "$stderr_log_file"
+        eval $1 2>&1 | tee -a "$console_log_file"
+    else
+        eval $1 &>> "$console_log_file"
     fi
     if [ $? -eq 0 ]
     then
         echo -e "${BOLD_BLUE}$1: ${BOLD_GREEN}OK!${RESET_COLOR}"
-        cat "$stdout_log_file" >> "$console_log_file"
         return 0
     else
         echo -e "${BOLD_RED}$1: FAIL!${RESET_COLOR}"
-        cat "$stdout_log_file" >> "$console_log_file"
-        cat "$stderr_log_file" >> "$console_log_file"
-        echo -e "Fail in: $1" >> "$error_log_file"
-        echo -e "Output:" >> "$error_log_file"
-        cat "$stdout_log_file" >> "$error_log_file"
-        echo -e "Error output:" >> "$error_log_file"
-        cat "$stderr_log_file" >> "$error_log_file"
+        echo -e "$1: FAIL!" >> "$error_log_file"
         return 1
     fi
 }
@@ -120,6 +109,7 @@ deb_install() {
             return 0
         } || {
             echo -e "${BOLD_RED}failed to install $1"
+            echo -e "Failed to install $1 deb package" >> "$error_log_file"
             return 1
         }
     fi
@@ -146,6 +136,7 @@ tar_load_to_opt() {
             return 0
         } || {
             echo -e "${BOLD_RED}failed to download $1"
+            echo -e "Failed to download $1" >> "$error_log_file"
             return 1
         }
     fi
@@ -169,10 +160,12 @@ file_load_to_opt() {
             return 0
         } || {
             echo -e "${BOLD_RED}failed to download $1"
+            echo -e "Failed to download $1" >> "$error_log_file"
             return 1
         }
     fi
 }
+
 # Script body
 #-------------------------------------------------------------------------------
 
@@ -187,13 +180,12 @@ do
     then
         i=$((i + 1))
         configsets+=(${!i})
+    elif [ ${!i} == "-v" ] || [ ${!i} == "--verbose-log" ]
+    then
+        verbose_log=true
     else
         echo -e "${BOLD_RED}Unknown option: ${!i}${RESET_COLOR}"
         exit 1
-    fi
-    if [ ${!i} == "-v" ] || [ ${!i} == "--verbose-log" ]
-    then
-        verbose_log=true
     fi
     i=$((i + 1))
 done
@@ -250,4 +242,11 @@ should be checked:${RESET_COLOR}"
     do
         echo -e "${BOLD_YELL}- ${program_directory}${RESET_COLOR}"
     done
+fi
+
+if [ -s ${error_log_file} ]
+then
+    exit 1
+else
+    exit 0
 fi
