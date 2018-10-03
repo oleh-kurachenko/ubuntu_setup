@@ -1,5 +1,11 @@
 image: ubuntu:16.04
 
+before_script:
+  - apt-get install sudo
+  - adduser --disabled-password --gecos '' docker
+  - adduser docker sudo
+  - echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 test:
   stage: test
   script:
