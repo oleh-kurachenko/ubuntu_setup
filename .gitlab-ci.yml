@@ -16,6 +16,8 @@ test:
     - ./main.sh -s common -s dev -s desktop -s server -v
     
 release:
+  script:
+    - echo "Collecting artifacts"
   artifacts:
     paths:
       - main.sh
