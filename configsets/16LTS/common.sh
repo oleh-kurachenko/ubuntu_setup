@@ -3,6 +3,8 @@
 # welcome message
 echo -e "${BOLD_CYAN}Installing config set common for 16 LTS${RESET_COLOR}"
 
+apt_install "git"
+
 apt_install "gdebi"
 
 apt_install "python-pip"

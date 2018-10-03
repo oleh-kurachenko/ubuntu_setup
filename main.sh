@@ -21,6 +21,7 @@ RESET_COLOR="\033[0;0m"
 # setting configuration constants with default values
 ubuntu_version="16LTS"
 update_software=true
+verbose_log=false
 temporary_file_prefix="oleh_kurachenko_ubuntu_setup_script_temporary_file_"
 tmp_directory="/tmp"
 opt_directory="/opt"
@@ -61,6 +62,11 @@ logged_command() {
     echo -e "${BOLD_BLUE}$1...${RESET_COLOR}"
     echo -e "$ $1" >> "$console_log_file"
     eval $1 1> "$stdout_log_file" 2> "$stderr_log_file"
+    if [ ${verbose_log} ]
+    then
+        cat "$stdout_log_file"
+        cat "$stderr_log_file"
+    fi
     if [ $? -eq 0 ]
     then
         echo -e "${BOLD_BLUE}$1: ${BOLD_GREEN}OK!${RESET_COLOR}"
@@ -184,6 +190,10 @@ do
     else
         echo -e "${BOLD_RED}Unknown option: ${!i}${RESET_COLOR}"
         exit 1
+    fi
+    if [ ${!i} == "-v" ] || [ ${!i} == "--verbose-log" ]
+    then
+        verbose_log=true
     fi
     i=$((i + 1))
 done
