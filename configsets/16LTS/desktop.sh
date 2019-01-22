@@ -155,10 +155,8 @@ logged_command \
     "gsettings set org.gnome.desktop.wm.preferences theme 'Arc-Dark-Solid'"
 
 #   wallpapers
-background_filename="${HOME}/Pictures/background.jpg"
-background_uri=\
-"https://wallpaper.wiki/wp-content/uploads/2017/04/wallpaper.wiki-Nature-in-\
-5cm-Per-Second-Anime-Wallpaper-PIC-WPD006029.jpg"
+background_filename="${HOME}/Pictures/background.png"
+background_uri="https://images5.alphacoders.com/937/937249.png"
 logged_command \
     "rm -f ${background_filename}"
 logged_command \
