@@ -53,25 +53,8 @@ logged_source() {
 # $1: command (if more then one, should be a block)
 # returns exit code: 0 if all ok, 1 otherwise
 logged_command() {
-
-    echo -e "${BOLD_BLUE}$1...${RESET_COLOR}"
-    echo -e "$ $1" >> "$console_log_file"
-
-    if ${verbose_log}
-    then
-        eval $1 2>&1 | tee -a "$console_log_file"
-    else
-        eval $1 &>> "$console_log_file"
-    fi
-    if [ $? -eq 0 ]
-    then
-        echo -e "${BOLD_BLUE}$1: ${BOLD_GREEN}OK!${RESET_COLOR}"
-        return 0
-    else
-        echo -e "${BOLD_RED}$1: FAIL!${RESET_COLOR}"
-        echo -e "$1: FAIL!" >> "$error_log_file"
-        return 1
-    fi
+    go run src/main.go execute $1
+    return $?
 }
 
 # Takes package name and installs it via apt-get
@@ -205,6 +188,15 @@ echo -e "e-mail  oleh.kurachenko@gmail.com"
 echo -e "GitHub  https://github.com/OlehKurachenko"
 echo -e "rate&CV http://www.linkedin.com/in/oleh-kurachenko-6b025b111\
 ${RESET_COLOR}"
+
+# TODO finish intergation seciton
+if [ -z ${GOPATH+x} ]
+then
+    sudo apt-get install golang-go -y
+    export GOPATH=$HOME/go
+    source ~/.bashrc
+fi
+go get github.com/fatih/color
 
 logged_source "src/apt_update.sh"
 
