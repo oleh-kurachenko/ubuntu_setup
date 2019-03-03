@@ -1,0 +1,12 @@
+{
+  "apt-packages": [
+    "git",
+    "gdebi",
+    "python-pip",
+    "vim-gnome",
+    "tree",
+    "openssh-server",
+    "curl",
+    "default-jre"
+  ]
+}

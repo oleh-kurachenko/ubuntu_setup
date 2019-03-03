@@ -61,8 +61,7 @@ logged_command() {
 # $1: package name
 # returns exit code: 0 if all ok, 1 otherwise
 apt_install() {
-    logged_command "sudo apt-get install $1 --yes"
-    return $?
+    go run src/main.go apt_install $1
 }
 
 # Takes repository name and adds it to apt repositories
@@ -203,6 +202,8 @@ logged_source "src/apt_update.sh"
 for configset in "${configsets[@]}"
 do
     logged_source "${configsets_path}/${ubuntu_version}/${configset}.sh"
+    go run src/main.go configsset "${configset}" \
+        "${configsets_path}/${ubuntu_version}/${configset}.json"
 done
 
 if [ "${#configsets[@]}" -ne 0 ]

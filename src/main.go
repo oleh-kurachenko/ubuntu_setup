@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/fatih/color"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -22,29 +24,27 @@ import (
  * <a href="linkedin.com/in/oleh-kurachenko-6b025b111">LinkedIn</a>
  */
 
+var colorBeforeExecution = color.New(color.FgBlue)
+var colorOk = color.New(color.FgGreen).Add(color.Bold)
+var colorFail = color.New(color.FgRed).Add(color.Bold)
+
 //
 // TODO write docs
 // TODO add verbosity option
 //
-func logged_execute(command string) bool {
-	var color_before_execution = color.New(color.FgBlue)
-	var color_ok = color.New(color.FgGreen).Add(color.Bold)
-	var color_fail = color.New(color.FgRed).Add(color.Bold)
-
-	command_parts := strings.Split(command, " ")
-
-	cmd := exec.Command(command_parts[0], command_parts[1:]...)
+func loggedExecute(command string) bool {
+	cmd := exec.Command("bash", "-c", command)
 	var stdout, stderr bytes.Buffer
 
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	color_before_execution.Print(command + "...")
+	colorBeforeExecution.Print(command + "...")
 
 	err := cmd.Run()
 
 	if err != nil {
-		color_fail.Println(" Fail!")
+		colorFail.Println(" Fail!")
 
 		log.Println("Command execution failed with code " + err.Error(
 			) + ": " + command)
@@ -54,8 +54,47 @@ func logged_execute(command string) bool {
 		return false
 	}
 
-	color_ok.Println(" OK!")
+	colorOk.Println(" OK!")
 	//log.Println("Stdout:\n" + string(stdout.Bytes()))
+	return true
+}
+
+//
+// TODO write docs
+// TODO add verbosity option
+//
+func aptInstall(packageName string) bool {
+	return loggedExecute("sudo apt-get install " + packageName + " -y")
+}
+
+func executeConfigsSet(name, path string) bool {
+	colorBeforeExecution.Println("Execution configs set " + name + "...")
+	colorBeforeExecution.Println("Configs file path: " + path)
+
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		colorFail.Println("Configs set: Fail!")
+		log.Println("Error while trying to open configs file: " + err.Error())
+		return false
+	}
+
+	var parsed map[string]interface{}
+	err = json.Unmarshal(data, &parsed)
+
+	if err != nil {
+		colorFail.Println("Configs set: Fail!")
+		log.Println("Error while trying to parse configs file: " + err.Error())
+		return false
+	}
+
+	// Dealing with apt packages
+	aptPackages := parsed["apt-packages"].([]interface{})
+	if (aptPackages != nil) {
+		for _, packageName := range aptPackages {
+			aptInstall(packageName.(string))
+		}
+	}
+
 	return true
 }
 
@@ -64,7 +103,19 @@ func main() {
 		panic("Not enought arguments for temporary wrapper")
 	}
 	if os.Args[1] == "execute" {
-		if logged_execute(strings.Join(os.Args[2:], " ")) {
+		if loggedExecute(strings.Join(os.Args[2:], " ")) {
+			os.Exit(0)
+		} else {
+			os.Exit(1)
+		}
+	} else if os.Args[1] == "apt_install"{
+		if aptInstall(os.Args[2]) {
+			os.Exit(0)
+		} else {
+			os.Exit(1)
+		}
+	} else if os.Args[1] == "configsset" {
+		if executeConfigsSet(os.Args[2], os.Args[3]) {
 			os.Exit(0)
 		} else {
 			os.Exit(1)
