@@ -1,4 +1,9 @@
 {
+  "pre-apt-commands": [
+    "echo \"deb https://dl.bintray.com/resin-io/debian stable etcher\" | sudo tee /etc/apt/sources.list.d/etcher.list",
+    "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61",
+    "sudo apt-get update --yes"
+  ],
   "apt-repositories": [
     "ppa:daniruiz/flat-remix",
     "ppa:noobslab/themes"
@@ -9,6 +14,7 @@
     "vlc",
     "unity-tweak-tool",
     "flat-remix",
-    "arc-theme"
+    "arc-theme",
+    "etcher-electron"
   ]
 }

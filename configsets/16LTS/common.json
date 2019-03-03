@@ -8,5 +8,8 @@
     "openssh-server",
     "curl",
     "default-jre"
+  ],
+  "post-apt-commands": [
+    "git config --global alias.lg \"log --oneline --decorate --graph --all\""
   ]
 }

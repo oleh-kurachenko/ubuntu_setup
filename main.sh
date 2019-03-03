@@ -57,22 +57,6 @@ logged_command() {
     return $?
 }
 
-# Takes package name and installs it via apt-get
-# $1: package name
-# returns exit code: 0 if all ok, 1 otherwise
-apt_install() {
-    go run src/main.go apt_install $1
-}
-
-# Takes repository name and adds it to apt repositories
-# $1: repository name
-# returns exit code: 0 if all ok, 1 otherwise
-apt_add_repository() {
-    logged_command "sudo add-apt-repository $1 --yes" &&
-    logged_command "sudo apt-get update --yes"
-    return $?
-}
-
 # Takes package name and URL of .deb file. If package with given name is not
 # installed, .deb file is being downloaded & installed
 # $1: package name
@@ -192,6 +176,7 @@ ${RESET_COLOR}"
 if [ -z ${GOPATH+x} ]
 then
     sudo apt-get install golang-go -y
+    sudo apt-get install git -y
     export GOPATH=$HOME/go
     source ~/.bashrc
 fi

@@ -1,4 +1,9 @@
 {
+  "pre-apt-commands": [
+    "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections",
+    "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections",
+    "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --"
+  ],
   "apt-repositories": [
     "ppa:webupd8team/java"
   ],
@@ -6,6 +11,14 @@
     "default-jdk",
     "doxygen",
     "graphviz",
-    "cmake"
+    "cmake",
+    "java-common",
+    "oracle-java8-installer",
+    "nodejs",
+    "build-essential"
+  ],
+  "post-apt-commands": [
+    "sudo npm install -g grunt-cli",
+    "sudo npm install -g typescript"
   ]
 }

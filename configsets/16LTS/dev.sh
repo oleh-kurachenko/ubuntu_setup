@@ -13,21 +13,3 @@ file_load_to_opt "qt" \
 tar_load_to_opt "jb_toolbox" \
     "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.11.4231.tar.gz"\
     "tar.gz"
-
-logged_command \
-    "echo debconf shared/accepted-oracle-license-v1-1 select true | \
-    sudo debconf-set-selections"
-logged_command \
-    "echo debconf shared/accepted-oracle-license-v1-1 seen true | \
-    sudo debconf-set-selections"
-apt_install "java-common"
-apt_install "oracle-java8-installer"
-
-logged_command \
-    "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --" &&
-    {
-        apt_install "nodejs"
-        apt_install "build-essential"
-        logged_command "sudo npm install -g grunt-cli"
-        logged_command "sudo npm install -g typescript"
-    }

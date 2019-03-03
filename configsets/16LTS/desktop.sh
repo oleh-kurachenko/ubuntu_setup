@@ -20,15 +20,6 @@ deb_install "opera-stable" \
     "https://www.opera.com/download/get/?id=44006&amp;location=415&amp;\
 nothanks=yes&amp;sub=marine&utm_tryagain=yes"
 
-logged_command \
-    "echo \"deb https://dl.bintray.com/resin-io/debian stable etcher\" \
-    | sudo tee /etc/apt/sources.list.d/etcher.list" &&
-logged_command \
-    "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
-    379CE192D401AB61" &&
-logged_command "sudo apt-get update --yes" &&
-apt_install "etcher-electron"
-
 tar_load_to_opt "telegram" "https://telegram.org/dl/desktop/linux" "tar.xz"
 
 # installing & setuping UI tools & themes

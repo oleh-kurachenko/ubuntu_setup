@@ -97,13 +97,23 @@ func executeConfigsSet(name, path string) bool {
 		return false
 	}
 
+	// Dealing with pre apt commands
+	preAptCommands := parsed["pre-apt-commands"]
+	if preAptCommands != nil {
+		preAptCommandsArray := preAptCommands.([]interface{})
+
+		for _, commandName := range preAptCommandsArray {
+			loggedExecute(commandName.(string))
+		}
+	}
+
 	// Dealing with apt repositories
 	aptRepositories := parsed["apt-repositories"]
 	if aptRepositories != nil {
 		aptRepositoriesArray := aptRepositories.([]interface{})
 
-		for _, packageName := range aptRepositoriesArray {
-			aptAddRepository(packageName.(string))
+		for _, repositoryName := range aptRepositoriesArray {
+			aptAddRepository(repositoryName.(string))
 		}
 		if len(aptRepositoriesArray) > 0 {
 			loggedExecute("sudo apt-get update -y")
@@ -117,6 +127,16 @@ func executeConfigsSet(name, path string) bool {
 
 		for _, packageName := range aptPackagesArray {
 			aptInstall(packageName.(string))
+		}
+	}
+
+	// Dealing with post apt commands
+	postAptCommands := parsed["post-apt-commands"]
+	if postAptCommands != nil {
+		postAptCommandsArray := postAptCommands.([]interface{})
+
+		for _, commandName := range postAptCommandsArray {
+			loggedExecute(commandName.(string))
 		}
 	}
 
