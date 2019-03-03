@@ -1,0 +1,14 @@
+{
+  "apt-repositories": [
+    "ppa:daniruiz/flat-remix",
+    "ppa:noobslab/themes"
+  ],
+  "apt-packages": [
+    "inkscape",
+    "gimp",
+    "vlc",
+    "unity-tweak-tool",
+    "flat-remix",
+    "arc-theme"
+  ]
+}

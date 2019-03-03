@@ -3,16 +3,6 @@
 # welcome message
 echo -e "${BOLD_CYAN}Installing config set dev for 16 LTS${RESET_COLOR}"
 
-apt_install "default-jdk"
-
-apt_install "golang-go"
-
-apt_install "doxygen"
-
-apt_install "graphviz"
-
-apt_install "cmake"
-
 deb_install "forticlient-sslvpn" \
     "https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb"
 
@@ -24,7 +14,6 @@ tar_load_to_opt "jb_toolbox" \
     "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.11.4231.tar.gz"\
     "tar.gz"
 
-apt_add_repository "ppa:webupd8team/java"
 logged_command \
     "echo debconf shared/accepted-oracle-license-v1-1 select true | \
     sudo debconf-set-selections"

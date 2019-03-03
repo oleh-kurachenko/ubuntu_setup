@@ -1,0 +1,11 @@
+{
+  "apt-repositories": [
+    "ppa:webupd8team/java"
+  ],
+  "apt-packages": [
+    "default-jdk",
+    "doxygen",
+    "graphviz",
+    "cmake"
+  ]
+}

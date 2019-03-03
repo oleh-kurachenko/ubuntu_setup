@@ -1,16 +1,5 @@
 package main
 
-import (
-	"bytes"
-	"encoding/json"
-	"github.com/fatih/color"
-	"io/ioutil"
-	"log"
-	"os"
-	"os/exec"
-	"strings"
-)
-
 /**
  * @file main.go
  * @copyright (C) 2019 by Oleh Kurachenko.
@@ -24,6 +13,17 @@ import (
  * <a href="linkedin.com/in/oleh-kurachenko-6b025b111">LinkedIn</a>
  */
 
+import (
+	"bytes"
+	"encoding/json"
+	"github.com/fatih/color"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
+	"strings"
+)
+
 var colorBeforeExecution = color.New(color.FgBlue)
 var colorOk = color.New(color.FgGreen).Add(color.Bold)
 var colorFail = color.New(color.FgRed).Add(color.Bold)
@@ -32,6 +32,7 @@ var colorFail = color.New(color.FgRed).Add(color.Bold)
 // TODO write docs
 // TODO add verbosity option
 //
+//noinspection GoUnhandledErrorResult
 func loggedExecute(command string) bool {
 	cmd := exec.Command("bash", "-c", command)
 	var stdout, stderr bytes.Buffer
@@ -67,6 +68,15 @@ func aptInstall(packageName string) bool {
 	return loggedExecute("sudo apt-get install " + packageName + " -y")
 }
 
+//
+// TODO write docs
+// TODO add verbosity option
+//
+func aptAddRepository(repositoryName string) bool {
+	return loggedExecute("sudo add-apt-repository " + repositoryName + " -y")
+}
+
+//noinspection GoUnhandledErrorResult
 func executeConfigsSet(name, path string) bool {
 	colorBeforeExecution.Println("Execution configs set " + name + "...")
 	colorBeforeExecution.Println("Configs file path: " + path)
@@ -87,10 +97,25 @@ func executeConfigsSet(name, path string) bool {
 		return false
 	}
 
+	// Dealing with apt repositories
+	aptRepositories := parsed["apt-repositories"]
+	if aptRepositories != nil {
+		aptRepositoriesArray := aptRepositories.([]interface{})
+
+		for _, packageName := range aptRepositoriesArray {
+			aptAddRepository(packageName.(string))
+		}
+		if len(aptRepositoriesArray) > 0 {
+			loggedExecute("sudo apt-get update -y")
+		}
+	}
+
 	// Dealing with apt packages
-	aptPackages := parsed["apt-packages"].([]interface{})
-	if (aptPackages != nil) {
-		for _, packageName := range aptPackages {
+	aptPackages := parsed["apt-packages"]
+	if aptPackages != nil {
+		aptPackagesArray := aptPackages.([]interface{})
+
+		for _, packageName := range aptPackagesArray {
 			aptInstall(packageName.(string))
 		}
 	}

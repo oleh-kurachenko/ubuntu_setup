@@ -3,12 +3,6 @@
 # welcome message
 echo -e "${BOLD_CYAN}Installing desktop programs & tools${RESET_COLOR}"
 
-apt_install "inkscape"
-
-apt_install "gimp"
-
-apt_install "vlc"
-
 deb_install "google-chrome-stable" \
     "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
@@ -39,13 +33,6 @@ tar_load_to_opt "telegram" "https://telegram.org/dl/desktop/linux" "tar.xz"
 
 # installing & setuping UI tools & themes
 #-------------------------------------------------------------------------------
-apt_install "unity-tweak-tool"
-
-apt_add_repository "ppa:daniruiz/flat-remix"
-apt_add_repository "ppa:noobslab/themes"
-
-apt_install "flat-remix"
-apt_install "arc-theme"
 
 #   common constants
 border_color='#ffff00ff'
