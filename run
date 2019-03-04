@@ -7,6 +7,7 @@ sudo echo -ne "" || exit 1
 if [ -z ${GOPATH+x} ]
 then
     {
+        echo -e "Installing go..." &&
         sudo apt-get install golang-go -y &> /dev/null &&
         sudo apt-get install git -y &> /dev/null &&
         sudo apt-get install gdebi -y &> /dev/null &&
