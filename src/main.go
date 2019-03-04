@@ -25,15 +25,19 @@ import (
 )
 
 var colorBeforeExecution = color.New(color.FgBlue)
-var colorOk = color.New(color.FgGreen).Add(color.Bold)
+var colorInfoH2 = color.New(color.FgBlue).Add(color.Bold)
+var colorInfo = color.New(color.FgBlue)
+var colorSuccess = color.New(color.FgGreen).Add(color.Bold)
 var colorFail = color.New(color.FgRed).Add(color.Bold)
+
+var temporaryDirectory = "/tmp"
 
 //
 // TODO write docs
 // TODO add verbosity option
 //
 //noinspection GoUnhandledErrorResult
-func loggedExecute(command string) bool {
+func execute(command string) bool {
 	cmd := exec.Command("bash", "-c", command)
 	var stdout, stderr bytes.Buffer
 
@@ -55,7 +59,7 @@ func loggedExecute(command string) bool {
 		return false
 	}
 
-	colorOk.Println(" OK!")
+	colorSuccess.Println(" OK!")
 	//log.Println("Stdout:\n" + string(stdout.Bytes()))
 	return true
 }
@@ -65,7 +69,34 @@ func loggedExecute(command string) bool {
 // TODO add verbosity option
 //
 func aptInstall(packageName string) bool {
-	return loggedExecute("sudo apt-get install " + packageName + " -y")
+	return execute("sudo apt-get install " + packageName + " -y")
+}
+
+//noinspection GoUnhandledErrorResult
+func debInstall(packageName, packageURL string) bool {
+	colorInfoH2.Println("Installing deb package " + packageName + "...")
+
+	checkCmd := exec.Command("bash", "-c",
+		"dpkg -l | grep " + packageName + " &>/dev/null")
+	if checkCmd.Run() == nil {
+		colorInfoH2.Print("Deb package " + packageName + ": ")
+		colorSuccess.Println("already installed.")
+		return true
+	}
+
+	if !execute("wget " + packageURL + " -O '" + temporaryDirectory +
+		"/" + packageName + ".deb'") {
+		return false
+	}
+
+	if !execute("sudo gdebi " + temporaryDirectory +
+		"/" + packageName + ".deb --n") {
+		return false
+	}
+
+	colorInfoH2.Print("Deb package " + packageName + ": ")
+	colorSuccess.Println("Installed!")
+	return true
 }
 
 //
@@ -73,7 +104,7 @@ func aptInstall(packageName string) bool {
 // TODO add verbosity option
 //
 func aptAddRepository(repositoryName string) bool {
-	return loggedExecute("sudo add-apt-repository " + repositoryName + " -y")
+	return execute("sudo add-apt-repository " + repositoryName + " -y")
 }
 
 //noinspection GoUnhandledErrorResult
@@ -103,7 +134,17 @@ func executeConfigsSet(name, path string) bool {
 		preAptCommandsArray := preAptCommands.([]interface{})
 
 		for _, commandName := range preAptCommandsArray {
-			loggedExecute(commandName.(string))
+			execute(commandName.(string))
+		}
+	}
+
+	// Dealing with pre deb commands
+	preDebCommands := parsed["pre-deb-commands"]
+	if preDebCommands != nil {
+		preDebCommandsArray := preDebCommands.([]interface{})
+
+		for _, commandName := range preDebCommandsArray {
+			execute(commandName.(string))
 		}
 	}
 
@@ -116,7 +157,7 @@ func executeConfigsSet(name, path string) bool {
 			aptAddRepository(repositoryName.(string))
 		}
 		if len(aptRepositoriesArray) > 0 {
-			loggedExecute("sudo apt-get update -y")
+			execute("sudo apt-get update -y")
 		}
 	}
 
@@ -130,13 +171,25 @@ func executeConfigsSet(name, path string) bool {
 		}
 	}
 
+	// Dealing with deb packages
+	depPackages := parsed["deb-packages"]
+	if depPackages != nil {
+		depPackagesArray := depPackages.([]interface{})
+
+		for _, packageJSONData := range depPackagesArray {
+			packageData := packageJSONData.(map[string]interface{})
+			debInstall(packageData["name"].(string),
+				packageData["url"].(string))
+		}
+	}
+
 	// Dealing with post apt commands
 	postAptCommands := parsed["post-apt-commands"]
 	if postAptCommands != nil {
 		postAptCommandsArray := postAptCommands.([]interface{})
 
 		for _, commandName := range postAptCommandsArray {
-			loggedExecute(commandName.(string))
+			execute(commandName.(string))
 		}
 	}
 
@@ -148,13 +201,7 @@ func main() {
 		panic("Not enought arguments for temporary wrapper")
 	}
 	if os.Args[1] == "execute" {
-		if loggedExecute(strings.Join(os.Args[2:], " ")) {
-			os.Exit(0)
-		} else {
-			os.Exit(1)
-		}
-	} else if os.Args[1] == "apt_install"{
-		if aptInstall(os.Args[2]) {
+		if execute(strings.Join(os.Args[2:], " ")) {
 			os.Exit(0)
 		} else {
 			os.Exit(1)

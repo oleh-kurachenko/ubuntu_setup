@@ -3,23 +3,6 @@
 # welcome message
 echo -e "${BOLD_CYAN}Installing desktop programs & tools${RESET_COLOR}"
 
-deb_install "google-chrome-stable" \
-    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-
-deb_install "skypeforlinux" \
-    "https://go.skype.com/skypeforlinux-64.deb"
-
-deb_install "discord" \
-    "https://discordapp.com/api/download?platform=linux&format=deb"
-
-logged_command "echo 'debconf opera-stable/add-deb-source select true' \
-    | sudo debconf-set-selections" &&
-logged_command "echo 'debconf opera-stable/add-deb-source seen true' \
-    | sudo debconf-set-selections" &&
-deb_install "opera-stable" \
-    "https://www.opera.com/download/get/?id=44006&amp;location=415&amp;\
-nothanks=yes&amp;sub=marine&utm_tryagain=yes"
-
 tar_load_to_opt "telegram" "https://telegram.org/dl/desktop/linux" "tar.xz"
 
 # installing & setuping UI tools & themes
