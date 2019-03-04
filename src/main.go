@@ -16,17 +16,19 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"github.com/fatih/color"
 	"io/ioutil"
 	"log"
-	"os"
 	"os/exec"
-	"strings"
 )
 
-var colorBeforeExecution = color.New(color.FgBlue)
-var colorInfoH2 = color.New(color.FgBlue).Add(color.Bold)
-var colorInfo = color.New(color.FgBlue)
+var colorInfo = color.New(color.FgCyan)
+var colorInfoH = color.New(color.FgCyan).Add(color.Bold)
+
+var colorAction = color.New(color.FgBlue)
+var colorActionH = color.New(color.FgBlue).Add(color.Bold)
+
 var colorSuccess = color.New(color.FgGreen).Add(color.Bold)
 var colorFail = color.New(color.FgRed).Add(color.Bold)
 
@@ -45,7 +47,7 @@ func execute(command string) bool {
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	colorBeforeExecution.Print(command + "...")
+	colorAction.Print(command + "...")
 
 	err := cmd.Run()
 
@@ -75,12 +77,12 @@ func aptInstall(packageName string) bool {
 
 //noinspection GoUnhandledErrorResult
 func debInstall(packageName, packageURL string) bool {
-	colorInfoH2.Println("Installing deb package " + packageName + "...")
+	colorActionH.Println("Installing deb package " + packageName + "...")
 
 	checkCmd := exec.Command("bash", "-c",
 		"dpkg -l | grep " + packageName + " &>/dev/null")
 	if checkCmd.Run() == nil {
-		colorInfoH2.Print("Deb package " + packageName + ": ")
+		colorActionH.Print("Deb package " + packageName + ": ")
 		colorSuccess.Println("already installed.")
 		return true
 	}
@@ -95,7 +97,7 @@ func debInstall(packageName, packageURL string) bool {
 		return false
 	}
 
-	colorInfoH2.Print("Deb package " + packageName + ": ")
+	colorActionH.Print("Deb package " + packageName + ": ")
 	colorSuccess.Println("Installed!")
 	return true
 }
@@ -109,12 +111,12 @@ func tarInstall(
 
 	executableWaitTime := 15
 
-	colorInfoH2.Println("Installing application " + applicationName + "...")
+	colorActionH.Println("Installing application " + applicationName + "...")
 
 	checkCmd := exec.Command("bash", "-c",
 		"ls -l " + optDir + " | grep " + applicationName + " &>/dev/null")
 	if checkCmd.Run() == nil {
-		colorInfoH2.Print("Application " + applicationName + ": ")
+		colorActionH.Print("Application " + applicationName + ": ")
 		colorSuccess.Println("already installed.")
 		return true
 	}
@@ -140,7 +142,7 @@ func tarInstall(
 	execute("timeout " + " " + string(
 		executableWaitTime) + " " +  optDir + "/" + executablePath)
 
-	colorInfoH2.Print("Application " + applicationName + ": ")
+	colorActionH.Print("Application " + applicationName + ": ")
 	colorSuccess.Println("Installed!")
 	return true
 }
@@ -155,8 +157,8 @@ func aptAddRepository(repositoryName string) bool {
 
 //noinspection GoUnhandledErrorResult
 func executeConfigsSet(name, path string) bool {
-	colorBeforeExecution.Println("Execution configs set " + name + "...")
-	colorBeforeExecution.Println("Configs file path: " + path)
+	colorActionH.Println("Execution configs set " + name + "...")
+	colorAction.Println("Configs file path: " + path)
 
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -247,23 +249,33 @@ func executeConfigsSet(name, path string) bool {
 	return true
 }
 
+//noinspection GoUnhandledErrorResult
 func main() {
-	if len(os.Args) < 2 {
-		panic("Not enought arguments for temporary wrapper")
+	colorInfoH.Println("Configuration tool for Ubuntu")
+	colorInfo.Print("   by ")
+	colorInfoH.Println("Oleh Kurachenko")
+	colorInfo.Println("e-mail  oleh.kurachenko@gmail.com")
+	colorInfo.Println("GitLab  https://gitlab.com/oleh.kurachenko")
+	colorInfo.Println("rate&CV http://www.linkedin.com/in/oleh-kurachenko-6b025b111")
+
+	execute("sudo apt-get update --yes")
+	execute("sudo apt-get upgrade --yes")
+	execute("sudo apt-get autoremove --yes")
+
+	ubuntu_version := flag.String("ubuntu_version", "16LTS",
+		"Version of Ubuntu. Possible values:\n" +
+		" - 16LTS")
+
+	flag.Parse()
+
+	for _, configset := range flag.Args() {
+		executeConfigsSet(configset,
+			"configsets/" + *ubuntu_version + "/" + configset + ".json")
 	}
-	if os.Args[1] == "execute" {
-		if execute(strings.Join(os.Args[2:], " ")) {
-			os.Exit(0)
-		} else {
-			os.Exit(1)
-		}
-	} else if os.Args[1] == "configsset" {
-		if executeConfigsSet(os.Args[2], os.Args[3]) {
-			os.Exit(0)
-		} else {
-			os.Exit(1)
-		}
-	} else {
-		panic("Unsupported temporary wrapper option")
+
+	if len(flag.Args()) > 0 {
+		execute("sudo apt-get update --yes")
+		execute("sudo apt-get upgrade --yes")
+		execute("sudo apt-get autoremove --yes")
 	}
 }

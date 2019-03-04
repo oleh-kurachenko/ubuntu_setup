@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+
+sudo echo -ne "" || exit 1
+
+if [ -z ${GOPATH+x} ]
+then
+    {
+        sudo apt-get install golang-go -y &&
+        sudo apt-get install git -y &&
+        export GOPATH=$HOME/go &&
+        source ~/.bashrc
+    } || exit 1
+fi
+go get github.com/fatih/color || exit 1
+
+go run src/main.go $@
