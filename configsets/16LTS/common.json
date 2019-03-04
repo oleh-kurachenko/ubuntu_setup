@@ -9,7 +9,8 @@
     "curl",
     "default-jre"
   ],
-  "post-apt-commands": [
-    "git config --global alias.lg \"log --oneline --decorate --graph --all\""
+  "post-install-commands": [
+    "git config --global alias.lg \"log --oneline --decorate --graph --all\"",
+    "gsettings set org.gnome.desktop.input-sources sources \"[('xkb', 'us'), ('xkb', 'ua'), ('xkb', 'ru')]\""
   ]
 }

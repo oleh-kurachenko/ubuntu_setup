@@ -1,5 +1,5 @@
 {
-  "pre-apt-commands": [
+  "pre-install-commands": [
     "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections",
     "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections",
     "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --"
@@ -37,7 +37,7 @@
       "executable": "*/jetbrains-toolbox"
     }
   ],
-  "post-apt-commands": [
+  "post-install-commands": [
     "sudo npm install -g grunt-cli",
     "sudo npm install -g typescript"
   ]

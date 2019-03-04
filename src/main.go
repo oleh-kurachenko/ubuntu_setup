@@ -174,22 +174,12 @@ func executeConfigsSet(name, path string) bool {
 		return false
 	}
 
-	// Dealing with pre apt commands
-	preAptCommands := parsed["pre-apt-commands"]
-	if preAptCommands != nil {
-		preAptCommandsArray := preAptCommands.([]interface{})
+	// Dealing with pre-install commands
+	preInstallCommands := parsed["pre-install-commands"]
+	if preInstallCommands != nil {
+		commands := preInstallCommands.([]interface{})
 
-		for _, commandName := range preAptCommandsArray {
-			execute(commandName.(string))
-		}
-	}
-
-	// Dealing with pre deb commands
-	preDebCommands := parsed["pre-deb-commands"]
-	if preDebCommands != nil {
-		preDebCommandsArray := preDebCommands.([]interface{})
-
-		for _, commandName := range preDebCommandsArray {
+		for _, commandName := range commands {
 			execute(commandName.(string))
 		}
 	}
@@ -244,12 +234,12 @@ func executeConfigsSet(name, path string) bool {
 		}
 	}
 
-	// Dealing with post apt commands
-	postAptCommands := parsed["post-apt-commands"]
-	if postAptCommands != nil {
-		postAptCommandsArray := postAptCommands.([]interface{})
+	// Dealing with post-install commands
+	postInstallCommands := parsed["post-install-commands"]
+	if postInstallCommands != nil {
+		commands := postInstallCommands.([]interface{})
 
-		for _, commandName := range postAptCommandsArray {
+		for _, commandName := range commands {
 			execute(commandName.(string))
 		}
 	}

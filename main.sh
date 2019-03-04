@@ -111,7 +111,6 @@ logged_source "src/apt_update.sh"
 
 for configset in "${configsets[@]}"
 do
-    logged_source "${configsets_path}/${ubuntu_version}/${configset}.sh"
     go run src/main.go configsset "${configset}" \
         "${configsets_path}/${ubuntu_version}/${configset}.json"
 done
