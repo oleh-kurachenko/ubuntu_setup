@@ -57,30 +57,6 @@ logged_command() {
     return $?
 }
 
-# Takes package name and URL of .deb file. If package with given name is not
-# installed, .deb file is being downloaded & installed
-# $1: package name
-# $2: .deb file URL
-# return exit code: 0 if all ok, 1 otherwise
-deb_install() {
-    dpkg -l | grep $1 1> /dev/null 2> /dev/null
-    if [ $? -eq 0 ]
-    then
-        echo -e "${BOLD_GREEN}$1 already installed${RESET_COLOR}"
-        return 0
-    else
-        logged_command "wget '$2' -O '${tmp_directory}/$1.deb'" &&
-        logged_command "sudo gdebi '${tmp_directory}/$1.deb' --n" && {
-            echo -e "${BOLD_GREEN}$1 successfully installed"
-            return 0
-        } || {
-            echo -e "${BOLD_RED}failed to install $1"
-            echo -e "Failed to install $1 deb package" >> "$error_log_file"
-            return 1
-        }
-    fi
-}
-
 # Takes program name and URL of archive which can be uncompressed by tar
 # $1: package name
 # $2: archive file URL
@@ -97,30 +73,6 @@ tar_load_to_opt() {
         logged_command "sudo mkdir '${opt_directory}/$1'" &&
         logged_command "sudo tar -xf '${tmp_directory}/$1.$3' \
             -C ${opt_directory}/$1" && {
-            echo -e "${BOLD_GREEN}$1 successfully downloaded"
-            opt_directories_to_check+=("$1")
-            return 0
-        } || {
-            echo -e "${BOLD_RED}failed to download $1"
-            echo -e "Failed to download $1" >> "$error_log_file"
-            return 1
-        }
-    fi
-}
-
-# Takes program name and URL of file
-# $1: package name
-# $2: file URL
-# return exit code: 0 if all ok, 1 otherwise
-file_load_to_opt() {
-    ls -l "${opt_directory}" | grep $1 1> /dev/null 2> /dev/null
-    if [ $? -eq 0 ]
-    then
-        echo -e "${BOLD_GREEN}$1 already in ${opt_directory}${RESET_COLOR}"
-        return 0
-    else
-        logged_command "sudo mkdir '${opt_directory}/$1'" &&
-        logged_command "sudo wget '$2' -P '${opt_directory}/$1'" && {
             echo -e "${BOLD_GREEN}$1 successfully downloaded"
             opt_directories_to_check+=("$1")
             return 0
