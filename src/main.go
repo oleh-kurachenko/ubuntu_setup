@@ -32,15 +32,18 @@ var colorActionH = color.New(color.FgBlue).Add(color.Bold)
 var colorSuccess = color.New(color.FgGreen).Add(color.Bold)
 var colorFail = color.New(color.FgRed).Add(color.Bold)
 
-var tmpDir = "/tmp"
-var optDir = "/opt"
+type ExecutionOptions struct {
+	tmpDir string
+	optDir string
+	ubuntuVersion string
+	isVerbose bool
+}
 
 //
-// TODO write docs
-// TODO add verbosity option
+// Execute bash command
 //
 //noinspection GoUnhandledErrorResult
-func execute(command string) bool {
+func execute(command string, options ExecutionOptions) bool {
 	cmd := exec.Command("bash", "-c", command)
 	var stdout, stderr bytes.Buffer
 
@@ -63,20 +66,24 @@ func execute(command string) bool {
 	}
 
 	colorSuccess.Println(" OK!")
-	//log.Println("Stdout:\n" + string(stdout.Bytes()))
+	if options.isVerbose {
+		log.Println("Stdout:\n" + string(stdout.Bytes()))
+	}
 	return true
 }
 
 //
-// TODO write docs
-// TODO add verbosity option
+// Install apt package
 //
-func aptInstall(packageName string) bool {
-	return execute("sudo apt-get install " + packageName + " -y")
+func aptInstall(packageName string, options ExecutionOptions) bool {
+	return execute("sudo apt-get install " + packageName + " -y", options)
 }
 
+//
+// Install deb package by downloading and launcign gdebi on it
+//
 //noinspection GoUnhandledErrorResult
-func debInstall(packageName, packageURL string) bool {
+func debInstall(packageName, packageURL string, options ExecutionOptions) bool {
 	colorActionH.Println("Installing deb package " + packageName + "...")
 
 	checkCmd := exec.Command("bash", "-c",
@@ -87,78 +94,81 @@ func debInstall(packageName, packageURL string) bool {
 		return true
 	}
 
-	if !execute("wget " + packageURL + " -O '" + tmpDir +
-		"/" + packageName + ".deb'") {
-		return false
-	}
-
-	if !execute("sudo gdebi " + tmpDir +
-		"/" + packageName + ".deb --n") {
-		return false
-	}
+	installIsOk :=
+		execute("wget " + packageURL + " -O '" + options.tmpDir +
+			"/" + packageName + ".deb'", options) &&
+		execute("sudo gdebi " + options.tmpDir + "/" + packageName +
+			".deb --n", options)
 
 	colorActionH.Print("Deb package " + packageName + ": ")
+
+	if !installIsOk {
+		colorFail.Println("Fail!")
+		return false
+	}
 	colorSuccess.Println("Installed!")
 	return true
 }
 
+//
+// Install application distributed using tar by unachive it and launch
+//
 //noinspection GoUnhandledErrorResult
 func tarInstall(
 	applicationName,
 	tarURL,
 	tarExtension,
-	executablePath string) bool {
+	executablePath string,
+	options ExecutionOptions) bool {
 
 	executableWaitTime := 15
 
 	colorActionH.Println("Installing application " + applicationName + "...")
 
 	checkCmd := exec.Command("bash", "-c",
-		"ls -l " + optDir + " | grep " + applicationName + " &>/dev/null")
+		"ls -l " + options.optDir + " | grep " + applicationName + " &>/dev" +
+		"/null")
 	if checkCmd.Run() == nil {
 		colorActionH.Print("Application " + applicationName + ": ")
 		colorSuccess.Println("already installed.")
 		return true
 	}
 
-	tarDownloadPath := tmpDir +
-		"/" + tarExtension + "." + tarExtension
-	applicatoinDir := optDir +
-		"/" + applicationName
+	tarDownloadPath := options.tmpDir + "/" + tarExtension + "." + tarExtension
+	applicatoinDir := options.optDir + "/" + applicationName
 
-	if !execute("wget " + tarURL + " -O '" + tarDownloadPath + "'") {
-		return false
-	}
-
-	if !execute("sudo mkdir '" + applicatoinDir + "'") {
-		return false
-	}
-
-	if !execute("sudo tar -xf '" + tarDownloadPath +
-		"' -C '" + applicatoinDir + "'") {
-		return false
-	}
-
-	execute("timeout " + " " + string(
-		executableWaitTime) + " " +  optDir + "/" + executablePath)
+	installIsOk :=
+		execute("wget " + tarURL + " -O '" + tarDownloadPath + "'", options) &&
+		execute("sudo mkdir '" + applicatoinDir + "'", options) &&
+		execute("sudo tar -xf '" + tarDownloadPath + "' -C '" +
+			applicatoinDir + "'", options) &&
+		execute("timeout " + " " + string(executableWaitTime) + " " +
+			options.optDir + "/" + executablePath, options)
 
 	colorActionH.Print("Application " + applicationName + ": ")
+
+	if !installIsOk {
+		colorFail.Println("Fail!")
+		return false
+	}
 	colorSuccess.Println("Installed!")
 	return true
 }
 
 //
-// TODO write docs
-// TODO add verbosity option
+// Add apt repository
 //
-func aptAddRepository(repositoryName string) bool {
-	return execute("sudo add-apt-repository " + repositoryName + " -y")
+func aptAddRepository(repositoryName string, options ExecutionOptions) bool {
+	return execute("sudo add-apt-repository " + repositoryName + " -y", options)
 }
 
+//
+// Execute config set from json file
+//
 //noinspection GoUnhandledErrorResult
-func executeConfigsSet(name, path string) bool {
-	colorActionH.Println("Execution configs set " + name + "...")
-	colorAction.Println("Configs file path: " + path)
+func executeConfigsSet(name, path string, options ExecutionOptions) bool {
+	colorInfoH.Println("Execution configs set " + name + "...")
+	colorInfo.Println("Configs file path: " + path)
 
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -182,7 +192,7 @@ func executeConfigsSet(name, path string) bool {
 		commands := preInstallCommands.([]interface{})
 
 		for _, commandName := range commands {
-			execute(commandName.(string))
+			execute(commandName.(string), options)
 		}
 	}
 
@@ -192,10 +202,10 @@ func executeConfigsSet(name, path string) bool {
 		aptRepositoriesArray := aptRepositories.([]interface{})
 
 		for _, repositoryName := range aptRepositoriesArray {
-			aptAddRepository(repositoryName.(string))
+			aptAddRepository(repositoryName.(string), options)
 		}
 		if len(aptRepositoriesArray) > 0 {
-			execute("sudo apt-get update -y")
+			execute("sudo apt-get update -y", options)
 		}
 	}
 
@@ -205,7 +215,7 @@ func executeConfigsSet(name, path string) bool {
 		aptPackagesArray := aptPackages.([]interface{})
 
 		for _, packageName := range aptPackagesArray {
-			aptInstall(packageName.(string))
+			aptInstall(packageName.(string), options)
 		}
 	}
 
@@ -217,7 +227,7 @@ func executeConfigsSet(name, path string) bool {
 		for _, packageJSONData := range depPackagesArray {
 			packageData := packageJSONData.(map[string]interface{})
 			debInstall(packageData["name"].(string),
-				packageData["url"].(string))
+				packageData["url"].(string), options)
 		}
 	}
 
@@ -232,7 +242,8 @@ func executeConfigsSet(name, path string) bool {
 				appData["name"].(string),
 				appData["url"].(string),
 				appData["extension"].(string),
-				appData["executable"].(string))
+				appData["executable"].(string),
+				options)
 		}
 	}
 
@@ -242,15 +253,32 @@ func executeConfigsSet(name, path string) bool {
 		commands := postInstallCommands.([]interface{})
 
 		for _, commandName := range commands {
-			execute(commandName.(string))
+			execute(commandName.(string), options)
 		}
 	}
 
+	colorInfoH.Print("Configs set " + name + ": ")
+	colorSuccess.Println("Success!")
 	return true
 }
 
 //noinspection GoUnhandledErrorResult
 func main() {
+	ubuntuVersion := flag.String("ubuntuVersion", "16LTS",
+		"Version of Ubuntu. Possible values:\n" +
+		" - 16LTS")
+
+	verbose := flag.Bool("verbose", false, "Is verbose")
+
+	flag.Parse()
+
+	options := ExecutionOptions{
+		"/tmp",
+		"/opt",
+		*ubuntuVersion,
+		*verbose,
+	}
+
 	colorInfoH.Println("Configuration tool for Ubuntu")
 	colorInfo.Print("   by ")
 	colorInfoH.Println("Oleh Kurachenko")
@@ -258,24 +286,18 @@ func main() {
 	colorInfo.Println("GitLab  https://gitlab.com/oleh.kurachenko")
 	colorInfo.Println("rate&CV http://www.linkedin.com/in/oleh-kurachenko-6b025b111")
 
-	execute("sudo apt-get update --yes")
-	execute("sudo apt-get upgrade --yes")
-	execute("sudo apt-get autoremove --yes")
-
-	ubuntu_version := flag.String("ubuntu_version", "16LTS",
-		"Version of Ubuntu. Possible values:\n" +
-		" - 16LTS")
-
-	flag.Parse()
+	execute("sudo apt-get update --yes", options)
+	execute("sudo apt-get upgrade --yes", options)
+	execute("sudo apt-get autoremove --yes", options)
 
 	for _, configset := range flag.Args() {
 		executeConfigsSet(configset,
-			"configsets/" + *ubuntu_version + "/" + configset + ".json")
+			"configsets/" + options.ubuntuVersion + "/" + configset + ".json", options)
 	}
 
 	if len(flag.Args()) > 0 {
-		execute("sudo apt-get update --yes")
-		execute("sudo apt-get upgrade --yes")
-		execute("sudo apt-get autoremove --yes")
+		execute("sudo apt-get update --yes", options)
+		execute("sudo apt-get upgrade --yes", options)
+		execute("sudo apt-get autoremove --yes", options)
 	}
 }

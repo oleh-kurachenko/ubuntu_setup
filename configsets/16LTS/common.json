@@ -1,7 +1,5 @@
 {
   "apt-packages": [
-    "git",
-    "gdebi",
     "python-pip",
     "vim-gnome",
     "tree",
