@@ -29,6 +29,14 @@
       "url": "https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb"
     }
   ],
+  "tar-applications": [
+    {
+      "name": "jb_toolbox",
+      "url": "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.11.4231.tar.gz",
+      "extension": "tar.gz",
+      "executable": "*/jetbrains-toolbox"
+    }
+  ],
   "post-apt-commands": [
     "sudo npm install -g grunt-cli",
     "sudo npm install -g typescript"

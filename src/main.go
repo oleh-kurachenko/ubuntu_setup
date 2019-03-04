@@ -30,7 +30,8 @@ var colorInfo = color.New(color.FgBlue)
 var colorSuccess = color.New(color.FgGreen).Add(color.Bold)
 var colorFail = color.New(color.FgRed).Add(color.Bold)
 
-var temporaryDirectory = "/tmp"
+var tmpDir = "/tmp"
+var optDir = "/opt"
 
 //
 // TODO write docs
@@ -84,17 +85,62 @@ func debInstall(packageName, packageURL string) bool {
 		return true
 	}
 
-	if !execute("wget " + packageURL + " -O '" + temporaryDirectory +
+	if !execute("wget " + packageURL + " -O '" + tmpDir +
 		"/" + packageName + ".deb'") {
 		return false
 	}
 
-	if !execute("sudo gdebi " + temporaryDirectory +
+	if !execute("sudo gdebi " + tmpDir +
 		"/" + packageName + ".deb --n") {
 		return false
 	}
 
 	colorInfoH2.Print("Deb package " + packageName + ": ")
+	colorSuccess.Println("Installed!")
+	return true
+}
+
+//noinspection GoUnhandledErrorResult
+func tarInstall(
+	applicationName,
+	tarURL,
+	tarExtension,
+	executablePath string) bool {
+
+	executableWaitTime := 15
+
+	colorInfoH2.Println("Installing application " + applicationName + "...")
+
+	checkCmd := exec.Command("bash", "-c",
+		"ls -l " + optDir + " | grep " + applicationName + " &>/dev/null")
+	if checkCmd.Run() == nil {
+		colorInfoH2.Print("Application " + applicationName + ": ")
+		colorSuccess.Println("already installed.")
+		return true
+	}
+
+	tarDownloadPath := tmpDir +
+		"/" + tarExtension + "." + tarExtension
+	applicatoinDir := optDir +
+		"/" + applicationName
+
+	if !execute("wget " + tarURL + " -O '" + tarDownloadPath + "'") {
+		return false
+	}
+
+	if !execute("sudo mkdir '" + applicatoinDir + "'") {
+		return false
+	}
+
+	if !execute("sudo tar -xf '" + tarDownloadPath +
+		"' -C '" + applicatoinDir + "'") {
+		return false
+	}
+
+	execute("timeout " + " " + string(
+		executableWaitTime) + " " +  optDir + "/" + executablePath)
+
+	colorInfoH2.Print("Application " + applicationName + ": ")
 	colorSuccess.Println("Installed!")
 	return true
 }
@@ -180,6 +226,21 @@ func executeConfigsSet(name, path string) bool {
 			packageData := packageJSONData.(map[string]interface{})
 			debInstall(packageData["name"].(string),
 				packageData["url"].(string))
+		}
+	}
+
+	// Dealing with tar applications
+	tarApplications := parsed["tar-applications"]
+	if tarApplications != nil {
+		tarApplicationsArray := tarApplications.([]interface{})
+
+		for _, appJSONData := range tarApplicationsArray {
+			appData := appJSONData.(map[string]interface{})
+			tarInstall(
+				appData["name"].(string),
+				appData["url"].(string),
+				appData["extension"].(string),
+				appData["executable"].(string))
 		}
 	}
 

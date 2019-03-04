@@ -57,33 +57,6 @@ logged_command() {
     return $?
 }
 
-# Takes program name and URL of archive which can be uncompressed by tar
-# $1: package name
-# $2: archive file URL
-# $3: expected archive extension
-# return exit code: 0 if all ok, 1 otherwise
-tar_load_to_opt() {
-    ls -l "${opt_directory}" | grep $1 1> /dev/null 2> /dev/null
-    if [ $? -eq 0 ]
-    then
-        echo -e "${BOLD_GREEN}$1 already in ${opt_directory}${RESET_COLOR}"
-        return 0
-    else
-        logged_command "wget '$2' -O '${tmp_directory}/$1.$3'" &&
-        logged_command "sudo mkdir '${opt_directory}/$1'" &&
-        logged_command "sudo tar -xf '${tmp_directory}/$1.$3' \
-            -C ${opt_directory}/$1" && {
-            echo -e "${BOLD_GREEN}$1 successfully downloaded"
-            opt_directories_to_check+=("$1")
-            return 0
-        } || {
-            echo -e "${BOLD_RED}failed to download $1"
-            echo -e "Failed to download $1" >> "$error_log_file"
-            return 1
-        }
-    fi
-}
-
 # Script body
 #-------------------------------------------------------------------------------
 

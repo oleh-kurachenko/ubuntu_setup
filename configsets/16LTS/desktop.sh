@@ -3,8 +3,6 @@
 # welcome message
 echo -e "${BOLD_CYAN}Installing desktop programs & tools${RESET_COLOR}"
 
-tar_load_to_opt "telegram" "https://telegram.org/dl/desktop/linux" "tar.xz"
-
 # installing & setuping UI tools & themes
 #-------------------------------------------------------------------------------
 

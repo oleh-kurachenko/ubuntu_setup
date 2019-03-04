@@ -12,6 +12,15 @@
     "ppa:daniruiz/flat-remix",
     "ppa:noobslab/themes"
   ],
+  "apt-packages": [
+    "inkscape",
+    "gimp",
+    "vlc",
+    "unity-tweak-tool",
+    "flat-remix",
+    "arc-theme",
+    "etcher-electron"
+  ],
   "deb-packages": [
     {
       "name": "google-chrome-stable",
@@ -30,13 +39,12 @@
       "url": "https://www.opera.com/download/get/?id=44006&amp;location=415&amp;nothanks=yes&amp;sub=marine&utm_tryagain=yes"
     }
   ],
-  "apt-packages": [
-    "inkscape",
-    "gimp",
-    "vlc",
-    "unity-tweak-tool",
-    "flat-remix",
-    "arc-theme",
-    "etcher-electron"
+  "tar-applications": [
+    {
+      "name": "telegram",
+      "url": "https://telegram.org/dl/desktop/linux",
+      "extension": "tar.xz",
+      "executable": "Telegram/Telegram"
+    }
   ]
 }
