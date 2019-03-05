@@ -39,6 +39,10 @@
     {
       "name": "opera-stable",
       "url": "https://www.opera.com/download/get/?id=44006&amp;location=415&amp;nothanks=yes&amp;sub=marine&utm_tryagain=yes"
+    },
+    {
+      "name": "teamviewer",
+      "url": "https://download.teamviewer.com/download/linux/teamviewer_amd64.deb"
     }
   ],
   "post-install-commands": [
