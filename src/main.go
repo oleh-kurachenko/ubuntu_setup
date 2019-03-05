@@ -95,7 +95,7 @@ func debInstall(packageName, packageURL string, options ExecutionOptions) bool {
 	}
 
 	installIsOk :=
-		execute("wget " + packageURL + " -O '" + options.tmpDir +
+		execute("wget '" + packageURL + "' -O '" + options.tmpDir +
 			"/" + packageName + ".deb'", options) &&
 		execute("sudo gdebi " + options.tmpDir + "/" + packageName +
 			".deb --n", options)
