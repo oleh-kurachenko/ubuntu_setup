@@ -21,12 +21,17 @@
     "qt5-doc",
     "qt5-doc-html",
     "qtbase5-doc-html",
-    "qtbase5-examples"
+    "qtbase5-examples",
+    "libgtest-dev"
   ],
   "deb-packages": [
     {
       "name": "forticlient-sslvpn",
       "url": "https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb"
+    },
+    {
+      "name": "virtualbox-6.0",
+      "url": "https://download.virtualbox.org/virtualbox/6.0.4/virtualbox-6.0_6.0.4-128413~Ubuntu~bionic_amd64.deb"
     }
   ],
   "tar-applications": [
@@ -39,6 +44,7 @@
   ],
   "post-install-commands": [
     "sudo npm install -g grunt-cli",
-    "sudo npm install -g typescript"
+    "sudo npm install -g typescript",
+    "cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp *.a /usr/lib"
   ]
 }
