@@ -143,7 +143,7 @@ func tarInstall(
 		execute("sudo tar -xf '" + tarDownloadPath + "' -C '" +
 			applicatoinDir + "'", options) &&
 		execute("timeout " + " " + executableWaitTime + " " +
-			options.optDir + "/" + executablePath, options)
+			applicatoinDir + "/" + executablePath, options)
 
 	colorActionH.Print("Application " + applicationName + ": ")
 
