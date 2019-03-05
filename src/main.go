@@ -264,7 +264,7 @@ func executeConfigsSet(name, path string, options ExecutionOptions) bool {
 
 //noinspection GoUnhandledErrorResult
 func main() {
-	ubuntuVersion := flag.String("ubuntuVersion", "16LTS",
+	ubuntuVersion := flag.String("ubuntuVersion", "18LTS",
 		"Version of Ubuntu. Possible values:\n" +
 		" - 16LTS")
 

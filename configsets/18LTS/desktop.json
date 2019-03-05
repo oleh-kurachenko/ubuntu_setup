@@ -1,0 +1,63 @@
+{
+  "pre-install-commands": [
+    "echo \"deb https://dl.bintray.com/resin-io/debian stable etcher\" | sudo tee /etc/apt/sources.list.d/etcher.list",
+    "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61",
+    "sudo apt-get update --yes",
+    "echo 'debconf opera-stable/add-deb-source select true' | sudo debconf-set-selections",
+    "echo 'debconf opera-stable/add-deb-source seen true' | sudo debconf-set-selections"
+  ],
+  "apt-repositories": [
+    "ppa:daniruiz/flat-remix",
+    "ppa:noobslab/themes"
+  ],
+  "apt-packages": [
+    "inkscape",
+    "gimp",
+    "vlc",
+    "gnome-tweak-tool",
+    "flat-remix",
+    "arc-theme",
+    "etcher-electron",
+    "telegram-desktop"
+  ],
+  "deb-packages": [
+    {
+      "name": "google-chrome-stable",
+      "url": "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    },
+    {
+      "name": "skypeforlinux",
+      "url": "https://go.skype.com/skypeforlinux-64.deb"
+    },
+    {
+      "name": "discord",
+      "url": "https://discordapp.com/api/download?platform=linux&format=deb"
+    },
+    {
+      "name": "opera-stable",
+      "url": "https://www.opera.com/download/get/?id=44006&amp;location=415&amp;nothanks=yes&amp;sub=marine&utm_tryagain=yes"
+    }
+  ],
+  "post-install-commands": [
+    "gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'",
+    "gsettings set org.gnome.desktop.interface icon-theme 'Flat-Remix-Dark'",
+    "gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-Black'",
+    "gsettings set org.gnome.desktop.interface cursor-size 18",
+    "gsettings set org.gnome.desktop.wm.preferences theme 'Arc-Dark'",
+
+    "gsettings set org.gnome.shell.extensions.dask-to-dock apply-custom-theme true",
+    "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 44",
+
+    "sudo update-locale LC_TIME=en_US.UTF-8",
+    "gsettings set org.gnome.desktop.interface clock-show-seconds true",
+    "gsettings set org.gnome.desktop.interface clock-show-date  true",
+    "gsettings set org.gnome.desktop.interface clock-show-weekday true",
+    "gsettings set org.gnome.desktop.interface clock-format 12h",
+    "gsettings set org.gnome.desktop.interface show-battery-percentage true",
+
+    "rm -f ${HOME}/Pictures/background.png",
+    "wget 'https://images5.alphacoders.com/937/937249.png' -O ${HOME}/Pictures/background.png",
+    "gsettings set org.gnome.desktop.background picture-uri \"file:///${HOME}/Pictures/background.png\"",
+    "gsettings set org.gnome.desktop.privacy report-technical-problems true"
+  ]
+}
