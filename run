@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 
 sudo echo -ne "" || exit 1
 
-if [ -z $GOPATH ]
+if [[ -z $GOPATH ]]
 then
     {
         echo -e "Installing Go..." &&
