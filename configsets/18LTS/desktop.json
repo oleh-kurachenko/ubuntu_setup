@@ -47,21 +47,18 @@
     "gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-Black'",
     "gsettings set org.gnome.desktop.interface cursor-size 18",
     "gsettings set org.gnome.desktop.wm.preferences theme 'Arc-Dark'",
-
-    "gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true",
     "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 44",
-
     "sudo update-locale LC_TIME=en_US.UTF-8",
     "gsettings set org.gnome.desktop.interface clock-show-seconds true",
     "gsettings set org.gnome.desktop.interface clock-show-date  true",
     "gsettings set org.gnome.desktop.interface clock-show-weekday true",
     "gsettings set org.gnome.desktop.interface clock-format 12h",
     "gsettings set org.gnome.desktop.interface show-battery-percentage true",
-
     "rm -f ${HOME}/Pictures/background.png",
     "wget 'https://images5.alphacoders.com/937/937249.png' -O ${HOME}/Pictures/background.png",
     "gsettings set org.gnome.desktop.background picture-uri \"file:///${HOME}/Pictures/background.png\"",
     "gsettings set org.gnome.desktop.screensaver picture-uri \"file:///${HOME}/Pictures/background.png\"",
-    "gsettings set org.gnome.desktop.privacy report-technical-problems true"
+    "gsettings set org.gnome.desktop.privacy report-technical-problems true",
+    "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Nautilus.desktop', 'gnome-control-center.desktop', 'google-chrome.desktop', 'telegramdesktop.desktop', 'discord.desktop', 'skypeforlinux.desktop']\""
   ]
 }
