@@ -121,7 +121,7 @@ func tarInstall(
 	executablePath string,
 	options ExecutionOptions) bool {
 
-	executableWaitTime := 15
+	executableWaitTime := "15"
 
 	colorActionH.Println("Installing application " + applicationName + "...")
 
@@ -142,7 +142,7 @@ func tarInstall(
 		execute("sudo mkdir '" + applicatoinDir + "'", options) &&
 		execute("sudo tar -xf '" + tarDownloadPath + "' -C '" +
 			applicatoinDir + "'", options) &&
-		execute("timeout " + " " + string(executableWaitTime) + " " +
+		execute("timeout " + " " + executableWaitTime + " " +
 			options.optDir + "/" + executablePath, options)
 
 	colorActionH.Print("Application " + applicationName + ": ")
