@@ -266,7 +266,7 @@ func executeConfigsSet(name, path string, options ExecutionOptions) bool {
 func main() {
 	ubuntuVersion := flag.String("ubuntuVersion", "18LTS",
 		"Version of Ubuntu. Possible values:\n" +
-		" - 16LTS")
+		" - '16LTS', '19'")
 
 	verbose := flag.Bool("verbose", false, "Is verbose")
 

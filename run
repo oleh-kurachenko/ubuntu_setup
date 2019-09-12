@@ -11,7 +11,7 @@ then
         sudo apt-get install golang-go -y &> /dev/null &&
         sudo apt-get install git -y &> /dev/null &&
         sudo apt-get install gdebi -y &> /dev/null &&
-        export GOPATH=$HOME/go &&
+        echo "export GOPATH=\"$HOME/go\"" >> ~/.bashrc &&
         source ~/.bashrc
     } || exit 1
 fi
