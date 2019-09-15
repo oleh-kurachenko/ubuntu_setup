@@ -69,6 +69,7 @@
     "gsettings set org.gnome.desktop.background picture-uri \"file:///${HOME}/Pictures/background.png\"",
     "gsettings set org.gnome.desktop.screensaver picture-uri \"file:///${HOME}/Pictures/background.png\"",
     "gsettings set org.gnome.desktop.privacy report-technical-problems true",
-    "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Nautilus.desktop', 'gnome-control-center.desktop', 'google-chrome.desktop', 'telegram-desktop_telegramdesktop.desktop', 'discord.desktop', 'skypeforlinux.desktop']\""
+    "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Nautilus.desktop', 'gnome-control-center.desktop', 'google-chrome.desktop', 'telegram-desktop_telegramdesktop.desktop', 'discord.desktop', 'skypeforlinux.desktop']\"",
+    "gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize:'"
   ]
 }
