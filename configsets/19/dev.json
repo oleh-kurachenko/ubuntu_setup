@@ -1,6 +1,8 @@
 {
   "pre-install-commands": [
-    "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --"
+    "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --",
+    "curl https://sh.rustup.rs -sSf | sh -s -- -y",
+    "source $HOME/.cargo/env && rustup update"
   ],
   "apt-packages": [
     "default-jdk",
