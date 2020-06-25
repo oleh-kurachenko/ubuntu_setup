@@ -62,7 +62,7 @@
     "gsettings set org.gnome.desktop.interface clock-format 12h",
     "gsettings set org.gnome.desktop.interface show-battery-percentage true",
     "rm -f ${HOME}/Pictures/background.png",
-    "wget 'https://images.alphacoders.com/596/596630.jpg' -O ${HOME}/Pictures/background.jpg",
+    "wget 'https://images.wallpaperscraft.ru/image/siluet_noch_zvezdnoe_nebo_137292_6578x3700.jpg' -O ${HOME}/Pictures/background.jpg",
     "gsettings set org.gnome.desktop.background picture-uri \"file:///${HOME}/Pictures/background.jpg\"",
     "gsettings set org.gnome.desktop.screensaver picture-uri \"file:///${HOME}/Pictures/background.jpg\"",
     "gsettings set org.gnome.desktop.privacy report-technical-problems true",
