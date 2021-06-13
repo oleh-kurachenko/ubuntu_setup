@@ -1,0 +1,42 @@
+{
+  "pre-install-commands": [
+    "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash --",
+    "curl https://sh.rustup.rs -sSf | sh -s -- -y",
+    "source $HOME/.cargo/env && rustup update"
+  ],
+  "apt-packages": [
+    "default-jdk",
+    "doxygen",
+    "graphviz",
+    "cmake",
+    "java-common",
+    "nodejs",
+    "build-essential",
+    "qtcreator",
+    "qt5-default",
+    "qt5-doc",
+    "qt5-doc-html",
+    "qtbase5-doc-html",
+    "qtbase5-examples",
+    "libgtest-dev"
+  ],
+  "deb-packages": [
+    {
+      "name": "forticlient-sslvpn",
+      "url": "https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb"
+    }
+  ],
+  "tar-applications": [
+    {
+      "name": "jb_toolbox",
+      "url": "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.17.6802.tar.gz",
+      "extension": "tar.gz",
+      "executable": "*/jetbrains-toolbox"
+    }
+  ],
+  "post-install-commands": [
+    "sudo npm install -g grunt-cli",
+    "sudo npm install -g typescript",
+    "cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp lib/*.a /usr/lib"
+  ]
+}
