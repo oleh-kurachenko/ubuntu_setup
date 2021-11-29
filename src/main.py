@@ -358,6 +358,52 @@ if __name__ == "__main__":
             f"{Style.RESET_ALL}")
         exit(0)
 
+    if sudo_available:
+        print(f"{Fore.BLUE}- Global update commands...{Style.RESET_ALL}")
+
+        no_issues: bool = True
+
+        commands = [
+            "sudo apt update",
+            "sudo apt upgrade -y",
+            "sudo apt autoremove -y"
+        ]
+        for i, command in enumerate(commands):
+            no_issues = execute_command(command, i + 1, len(commands))
+            if not no_issues:
+                break
+
+        if not no_issues:
+            print(f"{Fore.BLUE}- Global update commands: " +
+                  f"{Fore.RED + Style.BRIGHT}FAILED{Style.RESET_ALL}")
+            exit(1)
+        else:
+            print(f"{Fore.BLUE}- Global update commands: " +
+                  f"{Fore.GREEN + Style.BRIGHT}Success{Style.RESET_ALL}")
+
     for i, configset in enumerate(sys.argv[2:]):
         execute_configset(
             configsets_dir, configset, i + 1, len(sys.argv) - 2, sudo_available)
+
+    if sudo_available:
+        print(f"{Fore.BLUE}- Global update commands...{Style.RESET_ALL}")
+
+        no_issues: bool = True
+
+        commands = [
+            "sudo apt update",
+            "sudo apt upgrade -y",
+            "sudo apt autoremove -y"
+        ]
+        for i, command in enumerate(commands):
+            no_issues = execute_command(command, i + 1, len(commands))
+            if not no_issues:
+                break
+
+        if not no_issues:
+            print(f"{Fore.BLUE}- Global update commands: " +
+                  f"{Fore.RED + Style.BRIGHT}FAILED{Style.RESET_ALL}")
+            exit(1)
+        else:
+            print(f"{Fore.BLUE}- Global update commands: " +
+                  f"{Fore.GREEN + Style.BRIGHT}Success{Style.RESET_ALL}")
