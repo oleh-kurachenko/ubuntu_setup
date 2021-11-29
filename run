@@ -4,19 +4,4 @@ cd "$(dirname "$0")"
 
 sudo echo -ne "" || exit 1
 
-if [[ -z $GOPATH ]]
-then
-    {
-        echo -e "Installing Go..." &&
-        sudo apt-get install golang-go -y &> /dev/null &&
-        sudo apt-get install git -y &> /dev/null &&
-        sudo apt-get install gdebi -y &> /dev/null &&
-        echo "export GOPATH=\"$HOME/go\"" >> ~/.bashrc &&
-        source ~/.bashrc
-    } || exit 1
-fi
-
-go env -w GO111MODULE=off
-go get github.com/fatih/color &> /dev/null || exit 1
-
-go run src/main.go $@
+./src/main.py $@
