@@ -1,0 +1,39 @@
+version: 1
+interactive-sections:
+  - *
+locale: "en_US.UTF-8"
+source:
+  search_drivers: true
+  id: ubuntu-desktop
+codecs:
+  install: true
+drivers:
+  install: true
+snaps:
+  - name: skype
+  - name: discord
+packages:
+  - git
+  - python3-pip
+  - vim
+  - tree
+  - openssh-server
+  - curl
+  - default-jre
+  - default-jdk
+  - java-common
+  - gimp
+  - vlc
+  - obs-studio
+  - virtualbox
+  - doxygen
+  - graphviz
+  - cmake
+  - build-essential
+  - qtcreator
+  - tmux
+timezone: Europe/Kyiv
+updates: security
+shutdown: reboot
+late-commands:
+  - "echo 'TODO: add commands'"

@@ -24,16 +24,12 @@
   ],
   "apt-packages": [
     "oracle-java14-installer",
-    "inkscape",
-    "gimp",
-    "vlc",
-    "gnome-tweak-tool",
+
     "flat-remix",
     "arc-theme",
+
     "balena-etcher-electron",
-    "blueman",
-    "obs-studio",
-    "virtualbox",
+
     "atom",
     "telegram-desktop",
     "opera-stable",
@@ -46,9 +42,6 @@
     }
   ],
   "post-install-commands": [
-    "sudo snap install skype --classic",
-    "sudo snap install discord --classic",
-
     "gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'",
     "gsettings set org.gnome.desktop.interface icon-theme 'Flat-Remix-Blue-Dark'",
     "gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-Black'",
