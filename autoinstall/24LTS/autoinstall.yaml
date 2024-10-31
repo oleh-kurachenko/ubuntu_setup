@@ -1,6 +1,9 @@
 version: 1
 interactive-sections:
-  - *
+  - refresh-installer
+  - network
+  - storage
+  - identity
 locale: "en_US.UTF-8"
 source:
   search_drivers: true
