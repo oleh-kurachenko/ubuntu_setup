@@ -37,10 +37,14 @@ gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profi
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TERMINAL_PROFILE_ID/ background-color '#141617'
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TERMINAL_PROFILE_ID/ foreground-color '#D3D7CF'
 
-#background
+# background image
 rm -f "${HOME}/Pictures/background.png"
 wget 'https://initiate.alphacoders.com/download/images6/1322318/jpeg' -O "${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.background picture-uri "file:///${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.background picture-uri-dark "file:///${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.screensaver picture-uri "file:///${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.screensaver picture-uri-dark "file:///${HOME}/Pictures/background.jpg"
+
+# additional programs
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp
+dpkg -i /tmp/google-chrome-stable_current_amd64.deb
