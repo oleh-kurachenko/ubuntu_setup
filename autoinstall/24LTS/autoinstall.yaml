@@ -41,4 +41,4 @@ packages:
 late-commands:
   - "wget https://github.com/oleh-kurachenko/ubuntu_setup/archive/refs/heads/master.tar.gz -P /target/root/tmp"
   - "mkdir /target/root/ubuntu_setup"
-  - "tar -xzvf /target/root/tmp/master.tar.gz -C /target/root/ubuntu_setup strip-components=1"
+  - "tar -xzvf /target/root/tmp/master.tar.gz -C /target/root/ubuntu_setup -strip-components=1"
