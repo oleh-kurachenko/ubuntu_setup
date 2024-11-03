@@ -12,7 +12,5 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', '
 # icons - flat-remix
 mkdir "$HOME"/.icons
 wget https://github.com/daniruiz/flat-remix/archive/refs/heads/master.tar.gz -P /tmp/
-tar -xzvf /tmp/master.tar.gz -C "$HOME"/.icons -strip-components=1
+tar -xzvf /tmp/master.tar.gz -C "$HOME"/.icons --strip-components=1
 gsettings set org.gnome.desktop.interface icon-theme "Flat-Remix-Blue-Dark"
-
-
