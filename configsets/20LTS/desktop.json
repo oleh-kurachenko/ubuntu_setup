@@ -1,34 +1,11 @@
 {
   "pre-install-commands": [
-    "echo \"deb https://deb.etcher.io stable etcher\" | sudo tee /etc/apt/sources.list.d/balena-etcher.list",
-    "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61",
-
-    "echo oracle-java14-installer shared/accepted-oracle-license-v1-2 boolean true | sudo debconf-set-selections",
-
-    "wget -qO - https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -",
-    "sudo sh -c 'echo \"deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main\" > /etc/apt/sources.list.d/atom.list'",
-
-    "wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -",
-    "sudo add-apt-repository \"deb [arch=amd64] https://deb.opera.com/opera-stable/ stable non-free\"",
-    "echo 'debconf opera-stable/add-deb-source select true' | sudo debconf-set-selections",
-    "echo 'debconf opera-stable/add-deb-source seen true' | sudo debconf-set-selections",
-
     "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -",
     "sudo sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google-chrome.list'",
 
     "sudo apt-get update --yes"
   ],
-  "apt-repositories": [
-    "ppa:linuxuprising/java"
-  ],
   "apt-packages": [
-    "oracle-java14-installer",
-
-    "balena-etcher-electron",
-
-    "atom",
-    "telegram-desktop",
-    "opera-stable",
     "google-chrome-stable"
   ],
   "deb-packages": [

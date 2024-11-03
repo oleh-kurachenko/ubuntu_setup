@@ -18,6 +18,8 @@ shutdown: reboot
 snaps:
   - name: skype
   - name: discord
+  - name: telegram-desktop
+  - name: opera
 packages:
   - git
   - python3-pip
@@ -38,3 +40,6 @@ packages:
   - build-essential
   - qtcreator
   - tmux
+late-commands:
+  - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /target/root/tmp"
+  - "curtin in-target --target=/target -- dpkg -i /root/tmp/google-chrome-stable_current_amd64.deb"
