@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-cd "$(dirname "$0")"
-
-sudo echo -ne "" || exit 1
-
-./src/main.py $@

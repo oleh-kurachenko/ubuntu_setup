@@ -49,3 +49,5 @@ packages:
   - qtcreator
   - tmux
   - libgtest-dev
+  - ca-certificates
+  - clang-format

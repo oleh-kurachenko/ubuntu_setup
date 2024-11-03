@@ -25,7 +25,7 @@ gsettings set org.gnome.desktop.interface show-battery-percentage true
 # icons - flat-remix
 mkdir "$HOME"/.icons
 wget https://github.com/daniruiz/flat-remix/archive/refs/heads/master.tar.gz -P /tmp/
-tar -xzvf /tmp/master.tar.gz -C "$HOME"/.icons --strip-components=1
+tar -xzf /tmp/master.tar.gz -C "$HOME"/.icons --strip-components=1
 gsettings set org.gnome.desktop.interface icon-theme "Flat-Remix-Blue-Dark"
 
 # gnome terminal
@@ -59,3 +59,13 @@ gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org
 
 # build Google Test
 cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp lib/*.a /usr/lib
+
+# install Docker
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
