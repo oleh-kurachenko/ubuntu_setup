@@ -20,6 +20,14 @@ snaps:
   - name: discord
   - name: telegram-desktop
   - name: opera
+  - name: clion
+    classic: true
+  - name: pycharm-professional
+    classic: true
+  - name: webstorm
+    classic: true
+  - name: datagrip
+    classic: true
 packages:
   - git
   - python3-pip
@@ -40,3 +48,4 @@ packages:
   - build-essential
   - qtcreator
   - tmux
+  - libgtest-dev

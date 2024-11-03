@@ -50,5 +50,12 @@ sudo apt install /tmp/google-chrome-stable_current_amd64.deb
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -P /tmp
 sudo apt install /tmp/teamviewer_amd64.deb
 
+# rust
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source $HOME/.cargo/env && rustup update
+
 # favorite apps
 gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop', 'telegram-desktop_telegram-desktop.desktop', 'discord_discord.desktop']"
+
+# build Google Test
+cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp lib/*.a /usr/lib
