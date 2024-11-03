@@ -24,8 +24,6 @@
   "apt-packages": [
     "oracle-java14-installer",
 
-    "arc-theme",
-
     "balena-etcher-electron",
 
     "atom",
@@ -40,24 +38,6 @@
     }
   ],
   "post-install-commands": [
-    "gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'",
-    "gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-Black'",
-    "gsettings set org.gnome.desktop.interface cursor-size 18",
-    "gsettings set org.gnome.desktop.wm.preferences theme 'Arc-Dark'",
-    "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 44",
-    "sudo update-locale LC_TIME=en_US.UTF-8",
-    "gsettings set org.gnome.desktop.interface clock-show-seconds true",
-    "gsettings set org.gnome.desktop.interface clock-show-date  true",
-    "gsettings set org.gnome.desktop.interface clock-show-weekday true",
-    "gsettings set org.gnome.desktop.interface clock-format 12h",
-    "gsettings set org.gnome.desktop.interface show-battery-percentage true",
-    "rm -f ${HOME}/Pictures/background.png",
-    "wget 'https://images4.alphacoders.com/105/1055913.jpg' -O ${HOME}/Pictures/background.jpg",
-    "gsettings set org.gnome.desktop.background picture-uri \"file:///${HOME}/Pictures/background.jpg\"",
-    "gsettings set org.gnome.desktop.screensaver picture-uri \"file:///${HOME}/Pictures/background.jpg\"",
-    "gsettings set org.gnome.desktop.privacy report-technical-problems true",
-    "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Nautilus.desktop', 'gnome-control-center.desktop', 'google-chrome.desktop', 'telegram-desktop_telegramdesktop.desktop', 'discord.desktop', 'skypeforlinux.desktop']\"",
-    "gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize:'",
-    "gsettings set org.gnome.mutter workspaces-only-on-primary false"
+    "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Nautilus.desktop', 'gnome-control-center.desktop', 'google-chrome.desktop', 'telegram-desktop_telegramdesktop.desktop', 'discord.desktop', 'skypeforlinux.desktop']\""
   ]
 }
