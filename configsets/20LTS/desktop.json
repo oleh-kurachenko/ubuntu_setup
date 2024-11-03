@@ -19,13 +19,11 @@
     "sudo apt-get update --yes"
   ],
   "apt-repositories": [
-    "ppa:daniruiz/flat-remix",
     "ppa:linuxuprising/java"
   ],
   "apt-packages": [
     "oracle-java14-installer",
 
-    "flat-remix",
     "arc-theme",
 
     "balena-etcher-electron",
@@ -43,7 +41,6 @@
   ],
   "post-install-commands": [
     "gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'",
-    "gsettings set org.gnome.desktop.interface icon-theme 'Flat-Remix-Blue-Dark'",
     "gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-Black'",
     "gsettings set org.gnome.desktop.interface cursor-size 18",
     "gsettings set org.gnome.desktop.wm.preferences theme 'Arc-Dark'",

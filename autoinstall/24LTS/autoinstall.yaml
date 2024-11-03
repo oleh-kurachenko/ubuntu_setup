@@ -12,6 +12,9 @@ codecs:
   install: true
 drivers:
   install: true
+timezone: Europe/Kyiv
+updates: security
+shutdown: reboot
 snaps:
   - name: skype
   - name: discord
@@ -35,8 +38,7 @@ packages:
   - build-essential
   - qtcreator
   - tmux
-timezone: Europe/Kyiv
-updates: security
-shutdown: reboot
 late-commands:
-  - "echo 'TODO: add commands'"
+  - "wget https://github.com/oleh-kurachenko/ubuntu_setup/archive/refs/heads/refactoring/master.tar.gz -P /target/root/tmp"
+  - "mkdir /target/root/ubuntu_setup"
+  - "tar -xzvf /tmp/master.tar.gz -C /target/root/ubuntu_setup strip-components=1"
