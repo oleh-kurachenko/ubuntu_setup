@@ -43,8 +43,12 @@ wget 'https://initiate.alphacoders.com/download/images6/1322318/jpeg' -O "${HOME
 gsettings set org.gnome.desktop.background picture-uri "file:///${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.background picture-uri-dark "file:///${HOME}/Pictures/background.jpg"
 gsettings set org.gnome.desktop.screensaver picture-uri "file:///${HOME}/Pictures/background.jpg"
-gsettings set org.gnome.desktop.screensaver picture-uri-dark "file:///${HOME}/Pictures/background.jpg"
 
 # additional programs
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp
-dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+sudo apt install /tmp/google-chrome-stable_current_amd64.deb
+wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -P /tmp
+sudo apt install /tmp/teamviewer_amd64.deb
+
+# favorite apps
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop', 'telegram-desktop_telegram-desktop.desktop', 'discord_discord.desktop']"
