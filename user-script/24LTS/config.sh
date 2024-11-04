@@ -46,9 +46,9 @@ gsettings set org.gnome.desktop.screensaver picture-uri "file:///${HOME}/Picture
 
 # additional programs
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp
-sudo apt install /tmp/google-chrome-stable_current_amd64.deb
+sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -P /tmp
-sudo apt install /tmp/teamviewer_amd64.deb
+sudo apt install /tmp/teamviewer_amd64.deb -y
 
 # rust
 curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -68,4 +68,4 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
