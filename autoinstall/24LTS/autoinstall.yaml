@@ -1,0 +1,53 @@
+version: 1
+interactive-sections:
+  - refresh-installer
+  - network
+  - storage
+  - identity
+locale: "en_US.UTF-8"
+source:
+  search_drivers: true
+  id: ubuntu-desktop
+codecs:
+  install: true
+drivers:
+  install: true
+timezone: Europe/Kyiv
+updates: security
+shutdown: reboot
+snaps:
+  - name: skype
+  - name: discord
+  - name: telegram-desktop
+  - name: opera
+  - name: clion
+    classic: true
+  - name: pycharm-professional
+    classic: true
+  - name: webstorm
+    classic: true
+  - name: datagrip
+    classic: true
+packages:
+  - git
+  - python3-pip
+  - vim
+  - tree
+  - openssh-server
+  - curl
+  - default-jre
+  - default-jdk
+  - java-common
+  - gimp
+  - vlc
+  - obs-studio
+  - virtualbox
+  - doxygen
+  - graphviz
+  - cmake
+  - build-essential
+  - qtcreator
+  - tmux
+  - libgtest-dev
+  - ca-certificates
+  - clang-format
