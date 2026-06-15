@@ -16,10 +16,7 @@ timezone: Europe/Kyiv
 updates: security
 shutdown: reboot
 snaps:
-  - name: skype
-  - name: discord
   - name: telegram-desktop
-  - name: opera
   - name: clion
     classic: true
   - name: pycharm-professional
