@@ -5,6 +5,7 @@ set -euxo pipefail
 # git configs
 git config --global user.name "Oleh Kurachenko"
 git config --global user.email "oleh.kurachenko@gmail.com"
+git config --global core.editor "vim"
 git config --global alias.lg "log --oneline --decorate --graph --all"
 
 # gnome configs
@@ -47,15 +48,13 @@ gsettings set org.gnome.desktop.screensaver picture-uri "file:///${HOME}/Picture
 # additional programs
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp
 sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
-wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb -P /tmp
-sudo apt install /tmp/teamviewer_amd64.deb -y
 
 # rust
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 source $HOME/.cargo/env && rustup update
 
 # favorite apps
-gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop', 'telegram-desktop_telegram-desktop.desktop', 'discord_discord.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop', 'telegram-desktop_telegram-desktop.desktop']"
 
 # build Google Test
 cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp lib/*.a /usr/lib
